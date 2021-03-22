@@ -1,9 +1,10 @@
 (function ($) {
-//
-// contents => array object
-// keep => integer on items to keep
-// seconds => integer of seconds it takes to iterate through slide
-// speed => integer of delay denoting milliseconds default = 20
+/*
+** contents => array object
+** keep => integer on items to keep
+** seconds => integer of seconds it takes to iterate through slide
+** speed => integer of delay denoting milliseconds default = 20
+*/
   $.fn.writeText = function (contents, keep, seconds, delay = 10) {
     var current = 0,
       count = 0,
@@ -39,13 +40,12 @@
           setTimeout(function () {
               //make sure we clear as does not always complete
               if (!keep && elem.text()) {
-                  console.log("keep 1", keep);
                   elem.text("");
               }
               clearInterval(subtract);
-          }, (1000 * deviance));
+          }, Math.floor(1000 * 0.15 * seconds * deviance));
 
-      }, 4000);
+      },  Math.floor(1000 * 0.85 * seconds) );
 
     }, 0);
 
@@ -91,21 +91,19 @@
                   elem.text(elem.text().substring(0, elem.text().length - 1));
                   current--;
               }
-
           }
 
         }, (delay <= maxOutDelay ? delay : maxOutDelay ));
 
           setTimeout(function () {
               if (!keep && elem.text()) {
-                  comsole.log("keep", keep);
 
                   elem.text("");
               }
               clearInterval(subtract);
-          }, (1000 * deviance));
+          }, Math.floor(1000 * 0.15 * seconds * deviance));
 
-      }, 4000);
+      }, Math.floor(1000 * 0.85 * seconds) );
 
     }, seconds * 1000);
 
@@ -115,7 +113,7 @@
 
 let animatetext = function(){
   let $elements = $(".tt-holder .tt");
-  $(".ttt").writeText($elements, 16, 5, 40);
+  $(".ttt").writeText($elements, 0, 8, 50);
 }
 
 $(animatetext) ;
