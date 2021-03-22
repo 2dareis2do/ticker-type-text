@@ -1,0 +1,22 @@
+.red {
+  background: red;
+}
+
+.block {
+  width: 100%;
+  height: 50px;
+}
+
+.text {
+  font-size: 3rem;
+  max-width: 100%;
+}
+
+#holder {
+  width: 100%;
+}
+
+.tt {
+  display: none;
+}
+
