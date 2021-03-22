@@ -51,63 +51,70 @@
 
     }, 0);
 
-    // here we have the recurring animation
-    setInterval(function () {
-        var current = 0;
+    function timeout() {
+        setTimeout(function () {
+            // Do Something Here
+            // Then recall the parent function to
+            // create a recursive loop.
+            var current = 0;
 
-        let maxInDelay = Math.floor(((seconds - 1) * 1000 * deviance ) / (contents[(count) % contents.length].textContent.length));
+            let maxInDelay = Math.floor(((seconds - 1) * 1000 * deviance) / (contents[(count) % contents.length].textContent.length));
 
-        var contentArray = contents[(count) % contents.length].textContent.split("");
+            var contentArray = contents[(count) % contents.length].textContent.split("");
 
-        var add = setInterval(function () {
+            var add = setInterval(function () {
 
-        if (current < contentArray.length && !keep) {
+                if (current < contentArray.length && !keep) {
 
-          elem.text(elem.text() + contentArray[current++]);
-        } else {
-            if (keep + current < contentArray.length  ) {
-                elem.text(elem.text() + contentArray[keep + current++]);
-            }
-        }
+                    elem.text(elem.text() + contentArray[current++]);
+                } else {
+                    if (keep + current < contentArray.length) {
+                        elem.text(elem.text() + contentArray[keep + current++]);
+                    }
+                }
 
-        }, (delay <= maxInDelay ? delay : maxInDelay));
+            }, (delay <= maxInDelay ? delay : maxInDelay));
 
-     // remove or subtract
+            // remove or subtract
 
 
-      setTimeout(function () {
+            setTimeout(function () {
 
-        let maxOutDelay = Math.floor(1000 * deviance / elem.text().length);
-        clearInterval(add);
-        count++;
+                let maxOutDelay = Math.floor(1000 * deviance / elem.text().length);
+                clearInterval(add);
+                count++;
 
-        var subtract = setInterval(function () {
-          if (current > keep) {
+                var subtract = setInterval(function () {
+                    if (current > keep) {
 
-            elem.text(elem.text().substring(0, elem.text().length - 1));
-            current--;
-          } else {
-              current = elem.text().length--;
-              if (current > keep) {
+                        elem.text(elem.text().substring(0, elem.text().length - 1));
+                        current--;
+                    } else {
+                        current = elem.text().length--;
+                        if (current > keep) {
 
-                  elem.text(elem.text().substring(0, elem.text().length - 1));
-                  current--;
-              }
-          }
+                            elem.text(elem.text().substring(0, elem.text().length - 1));
+                            current--;
+                        }
+                    }
 
-        }, (delay <= maxOutDelay ? delay : maxOutDelay ));
+                }, (delay <= maxOutDelay ? delay : maxOutDelay));
 
-          setTimeout(function () {
-              if (!keep && elem.text()) {
+                setTimeout(function () {
+                    if (!keep && elem.text()) {
 
-                  elem.text("");
-              }
-              clearInterval(subtract);
-          }, Math.floor(1000 * ouT * seconds * deviance));
+                        elem.text("");
+                    }
+                    clearInterval(subtract);
+                }, Math.floor(1000 * ouT * seconds * deviance));
 
-      }, Math.floor(1000 * inT * seconds) );
+            }, Math.floor(1000 * inT * seconds));
 
-    }, seconds * 1000);
+            timeout();
+        }, seconds * 1000);
+    }
+
+    timeout();
 
   };
 
@@ -115,7 +122,7 @@
 
 let animatetext = function(){
   let $elements = $(".tt-holder .tt");
-  $(".ttt").writeText($elements, 0, 4, 20);
+  $(".ttt").writeText($elements, 16, 4, 20);
 }
 
 $(animatetext) ;
