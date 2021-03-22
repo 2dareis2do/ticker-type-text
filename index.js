@@ -8,7 +8,9 @@
   $.fn.writeText = function (contents, keep, seconds, delay = 10) {
     var current = 0,
       count = 0,
-      deviance = .90;
+      deviance = .90,
+      inT = .85,
+      ouT = .15,
       elem = this;
 
     // here we have the initial animation - on load
@@ -43,9 +45,9 @@
                   elem.text("");
               }
               clearInterval(subtract);
-          }, Math.floor(1000 * 0.15 * seconds * deviance));
+          }, Math.floor(1000 * ouT * seconds * deviance));
 
-      },  Math.floor(1000 * 0.85 * seconds) );
+      }, Math.floor(1000 * inT * seconds) );
 
     }, 0);
 
@@ -101,9 +103,9 @@
                   elem.text("");
               }
               clearInterval(subtract);
-          }, Math.floor(1000 * 0.15 * seconds * deviance));
+          }, Math.floor(1000 * ouT * seconds * deviance));
 
-      }, Math.floor(1000 * 0.85 * seconds) );
+      }, Math.floor(1000 * inT * seconds) );
 
     }, seconds * 1000);
 
@@ -113,7 +115,7 @@
 
 let animatetext = function(){
   let $elements = $(".tt-holder .tt");
-  $(".ttt").writeText($elements, 0, 8, 50);
+  $(".ttt").writeText($elements, 0, 4, 20);
 }
 
 $(animatetext) ;
