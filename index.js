@@ -18,33 +18,77 @@
         var contentArray = contents[0].textContent.split("");
 
         let maxInDelay = Math.floor((seconds -1) * 1000 * deviance / contents[0].textContent.length);
-        var add = setInterval(function () {
-            if (current < contentArray.length) {
-                elem.text(elem.text() + contentArray[current++]);
-            }
-        }, (delay <= maxInDelay ? delay : maxInDelay));
+        let timeoutAddCount = 0;
+        function timeoutAdd() {
+            setTimeout(function () {
+                     //do stuff
+                if (current < contentArray.length) {
+                    elem.text(elem.text() + contentArray[current++]);
+                }
+                // console.log("timeoutCount", timeoutCount);
+                // console.log("contents[0].textContent.length", contents[0].textContent.length);
+
+
+                if (timeoutAddCount >= contents[0].textContent.length) {
+                    return;
+                }
+                timeoutAddCount++;
+
+                    timeoutAdd();
+
+            }, (delay <= maxInDelay ? delay : maxInDelay));
+        }
+
+        timeoutAdd();
+
+        // var add = setInterval(function () {
+        //     if (current < contentArray.length) {
+        //         elem.text(elem.text() + contentArray[current++]);
+        //     }
+        // }, (delay <= maxInDelay ? delay : maxInDelay));
 
       // remove or subtract
       setTimeout(function () {
 
         let maxOutDelay = Math.floor(1000 * deviance / elem.text().length);
 
-        clearInterval(add);
+        // clearInterval(add);
         count++;
 
-        var subtract = setInterval(function () {
-          if (current > keep) {
-            elem.text(elem.text().substring(0, elem.text().length - 1));
-            current--;
+        // var subtract = setInterval(function () {
+        //   if (current > keep) {
+        //     elem.text(elem.text().substring(0, elem.text().length - 1));
+        //     current--;
+        //   }
+        // }, (delay <= maxOutDelay ? delay : maxOutDelay));
+
+          let timeoutSubtractCount = 0;
+          function timeoutSubract() {
+              setTimeout(function () {
+                  //do stuff
+                  if (current > keep) {
+                      elem.text(elem.text().substring(0, elem.text().length - 1));
+                      current--;
+                  }
+
+                  if (timeoutSubtractCount >= contents[0].textContent.length) {
+                      return;
+                  }
+                  timeoutSubtractCount++;
+
+                  timeoutSubract();
+
+              }, (delay <= maxOutDelay ? delay : maxOutDelay));
           }
-        }, (delay <= maxOutDelay ? delay : maxOutDelay));
+
+          timeoutSubract();
 
           setTimeout(function () {
               //make sure we clear as does not always complete
               if (!keep && elem.text()) {
                   elem.text("");
               }
-              clearInterval(subtract);
+            //   clearInterval(subtract);
           }, Math.floor(1000 * ouT * seconds * deviance));
 
       }, Math.floor(1000 * inT * seconds) );
@@ -62,18 +106,47 @@
 
             var contentArray = contents[(count) % contents.length].textContent.split("");
 
-            var add = setInterval(function () {
+            // var add = setInterval(function () {
 
-                if (current < contentArray.length && !keep) {
+            //     if (current < contentArray.length && !keep) {
 
-                    elem.text(elem.text() + contentArray[current++]);
-                } else {
-                    if (keep + current < contentArray.length) {
-                        elem.text(elem.text() + contentArray[keep + current++]);
+            //         elem.text(elem.text() + contentArray[current++]);
+            //     } else {
+            //         if (keep + current < contentArray.length) {
+            //             elem.text(elem.text() + contentArray[keep + current++]);
+            //         }
+            //     }
+
+            // }, (delay <= maxInDelay ? delay : maxInDelay));
+
+            let timeoutAddCount2 = 0;
+            function timeoutAdd2() {
+                setTimeout(function () {
+                    //do stuff
+                    if (current < contentArray.length && !keep) {
+
+                        elem.text(elem.text() + contentArray[current++]);
+                    } else {
+                        if (keep + current < contentArray.length) {
+                            elem.text(elem.text() + contentArray[keep + current++]);
+                        }
                     }
-                }
+                    // console.log("timeoutCount", timeoutCount);
+                    // console.log("contents[0].textContent.length", contents[0].textContent.length);
 
-            }, (delay <= maxInDelay ? delay : maxInDelay));
+
+                    if (timeoutAddCount2 >= contents[0].textContent.length) {
+                        return;
+                    }
+                    timeoutAddCount2++;
+
+                    timeoutAdd2();
+
+                }, (delay <= maxInDelay ? delay : maxInDelay));
+            }
+
+            timeoutAdd2();
+
 
             // remove or subtract
 
@@ -81,31 +154,64 @@
             setTimeout(function () {
 
                 let maxOutDelay = Math.floor(1000 * deviance / elem.text().length);
-                clearInterval(add);
+                // clearInterval(add);
                 count++;
 
-                var subtract = setInterval(function () {
-                    if (current > keep) {
+                // var subtract = setInterval(function () {
+                //     if (current > keep) {
 
-                        elem.text(elem.text().substring(0, elem.text().length - 1));
-                        current--;
-                    } else {
-                        current = elem.text().length--;
+                //         elem.text(elem.text().substring(0, elem.text().length - 1));
+                //         current--;
+                //     } else {
+                //         current = elem.text().length--;
+                //         if (current > keep) {
+
+                //             elem.text(elem.text().substring(0, elem.text().length - 1));
+                //             current--;
+                //         }
+                //     }
+
+                // }, (delay <= maxOutDelay ? delay : maxOutDelay));
+
+                let timeoutSubtractCount2 = 0;
+                function timeoutSubract2() {
+                    setTimeout(function () {
+                        //do stuff
+                        // if (current > keep) {
+                        //     elem.text(elem.text().substring(0, elem.text().length - 1));
+                        //     current--;
+                        // }
                         if (current > keep) {
 
                             elem.text(elem.text().substring(0, elem.text().length - 1));
                             current--;
-                        }
-                    }
+                        } else {
+                            current = elem.text().length--;
+                            if (current > keep) {
 
-                }, (delay <= maxOutDelay ? delay : maxOutDelay));
+                                elem.text(elem.text().substring(0, elem.text().length - 1));
+                                current--;
+                            }
+                        }
+
+                        if (timeoutSubtractCount2 >= contents[0].textContent.length) {
+                            return;
+                        }
+                        timeoutSubtractCount2++;
+
+                        timeoutSubract2();
+
+                    }, (delay <= maxOutDelay ? delay : maxOutDelay));
+                }
+
+                timeoutSubract2();
 
                 setTimeout(function () {
                     if (!keep && elem.text()) {
 
                         elem.text("");
                     }
-                    clearInterval(subtract);
+                    // clearInterval(subtract);
                 }, Math.floor(1000 * ouT * seconds * deviance));
 
             }, Math.floor(1000 * inT * seconds));
