@@ -44,7 +44,7 @@
         setTimeout(function () {
 
         let maxOutDelay = Math.floor((seconds * outTransPercent) * 1000 / elem.text().length);
-
+        // this is incremented in the first part after we add
         count++;
 
         let timeoutSubtractCount = 0;
@@ -69,7 +69,7 @@
           timeoutSubract();
 
           setTimeout(function () {
-              //make sure we clear as does not always complete
+              //make sure we clear as does not always complete when not using keep
               if (!keep && elem.text()) {
                   elem.text("");
               }
@@ -80,7 +80,6 @@
     }, 0);
 
     // part starts after x seconds parameter
-
     function timeout() {
         setTimeout(function () {
             // Do Something Here
@@ -91,7 +90,6 @@
             let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
 
             var contentArray = contents[count % contents.length].textContent.split("");
-
 
             let timeoutAddCount2 = 0;
             function timeoutAdd2() {
@@ -120,6 +118,7 @@
             setTimeout(function () {
 
                 let maxOutDelay = Math.floor(1000 * (seconds * outTransPercent) / elem.text().length);
+                // this is incremented in part 2 afte we add (before of subtract) after 80%
                 count++;
 
                 let timeoutSubtractCount2 = 0;
@@ -153,9 +152,16 @@
                 timeoutSubract2();
 
                 setTimeout(function () {
+                    // clean up if not using keep
                     if (!keep && elem.text()) {
-
                         elem.text("");
+                    }
+                    //clean if we are using keep
+                    if (keep && elem.text() != contents[count % contents.length].textContent.substr(0, keep)) {
+                        console.log("count", count);
+                        console.log("contents[count % contents.length].textContent", contents[count % contents.length].textContent);
+                        console.log("elem.text", elem.text());
+                        elem.text(contents[count % contents.length].textContent.substr(0, keep));
                     }
                 }, Math.floor((1000 * outTransPercent * seconds) - deviance));
 
