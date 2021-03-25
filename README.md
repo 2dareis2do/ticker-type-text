@@ -2,7 +2,7 @@
 
 ## About
 
-This is a jQuery Plugin designed to mimick a typewriter or news ticker.
+This is a jQuery Plugin designed to mimick a typewriter or news ticker. I looked at for one but did not find one that did quite what I wanted so decided to create this one.
 
 ## Requirements
 
