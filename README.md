@@ -57,28 +57,27 @@ $(animatetext) ;
 ## Parameters
 
 ### contents
-
-contents an html collection or array object.
+A html collection or array object.
 
 ### keep
 
-integer determining the number of text chars to keep between iterations e.g. 17
+Integer determining the number of text chars to keep between iterations e.g. 17
 
 ### seconds
 
-integer determining the numer of seconds the animation will take. e.g 5
+Integer determining the numer of seconds the animation will take. e.g 5
 
 ### speed
 
-integer of delay between inserting text items in milliseconds defaults to 20
+Integer of delay between inserting text items in milliseconds defaults to 20
 
 ### iterations
 
-integer for determing number of iterations for the entire collection. 0 denotes infinite,
+Integer for determing number of iterations for the entire collection. 0 denotes infinite.
 
 ### ratio
 
-float determing the relative value between when the animation starts and when it ends. This is usually weighted to prevent a large time delay at the end while also ensuring that there is not a gap between lines. e.g. 0.8
+Float determing the relative value between when the animation starts and when it ends. This is usually weighted to prevent a large time delay at the end while also ensuring that there is not a gap between lines. e.g. 0.8
 
 ### secondsout
 
