@@ -16,7 +16,7 @@ e.g.
 
 ### HTML
 
-The collection of strings we want to animate can be extracted from a htmk collection.
+The collection of strings we want to animate can be extracted from a html collection.
 
 e.g.
 
@@ -78,7 +78,7 @@ integer for determing number of iterations for the entire collection. 0 denotes 
 
 ### ratio
 
-float determing the relative value between when the animation starts and when it ends. This is usually weighted to prevent a large time delay at te end while also ensuring that there is not a gap between lines. e.g. 0.8
+float determing the relative value between when the animation starts and when it ends. This is usually weighted to prevent a large time delay at the end while also ensuring that there is not a gap between lines. e.g. 0.8
 
 ### secondsout
 
