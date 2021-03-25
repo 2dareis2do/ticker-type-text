@@ -12,7 +12,7 @@ This has been tested to work with jQuery 2.1.3. or later. Not sure but should wo
 
 This is designed to take a html collection and transform this into ticker type text output in the browser.
 
-e.g. 
+e.g.
 
 ### HTML
 
@@ -29,7 +29,7 @@ e.g.
   <h1 class="ttt"></h1>
 </div>
 ```
-In this example I have also used `ttt` as a classname. I will use this to target the output of my ticker type text. 
+In this example I have also used `ttt` as a classname. I will use this to target the output of my ticker type text.
 
 ### CSS
 
@@ -58,7 +58,7 @@ $(animatetext) ;
 
 ### contents
 
-contents an html collection or array object. 
+contents an html collection or array object.
 
 ### keep
 
@@ -82,4 +82,4 @@ float determing the relative value between when the animation starts and when it
 
 ### secondsout
 
-When using the keep feature, when set, this paramter allows configuration over the speed second part or subsequent frames. This can be higher or lower than that of the first frame.
+When using the `keep` feature (see above), when set, this parameter allows configuration over the speed of second and subsequent frames. This can be higher or lower than that of the first frame.

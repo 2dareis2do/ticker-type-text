@@ -83,7 +83,7 @@
 
     }, 0);
 
-    // part 2 starts after x seconds parameter
+    // part 2 starts after 'seconds' parameter
     function timeout() {
         setTimeout(function () {
             // Do Something Here
@@ -113,7 +113,6 @@
                     if (timeoutAddCount2 >= contents[count % contents.length].textContent.length) {
                         // we can do error checking here
                         if (keep && elem.text() != contents[(count) % contents.length].textContent) {
-                            // console.log(" error check", elem.text());
                             elem.text(contents[(count) % contents.length].textContent);
                         }
 
@@ -136,9 +135,9 @@
             setTimeout(function () {
 
                 let maxOutDelay = Math.floor(1000 * (seconds * outTransPercent) / elem.text().length);
-                // this is incremented in part 2 afte we add (before of subtract) after 80%
+                // this is incremented in part 2 after we add (before of subtract)
                 count++;
-                //exit before - may need to tidy up at this point?
+                // exit before 
                 if (iterations && count > contents.length * iterations) {
                     exit = true;
                     return;
@@ -184,7 +183,7 @@
                     if (!keep && elem.text()) {
                         elem.text("");
                     }
-                    //clean if we are using keep
+                    // clean if we are using keep
                     if (keep && elem.text() != contents[count % contents.length].textContent.substr(0, keep)) {
                         elem.text(contents[count % contents.length].textContent.substr(0, keep));
                     }
@@ -210,5 +209,4 @@ let animatetext = function(){
   let $elements = $(".tt-holder .tt");
   $(".ttt").writeText($elements, 17, 2, 30, 1, 0.7, 3);
 }
-// old config  $(".ttt").writeText($elements, 17, 5, 30);
 $(animatetext) ;
