@@ -1,21 +1,25 @@
 (function ($) {
 /*
-** contents => array object
-** keep => integer on items to keep
-** seconds => integer of seconds it takes to iterate through slide
-** speed => integer of delay denoting milliseconds default = 20
+* contents => array object
+* keep => integer on items to keep
+* seconds => integer of seconds it takes to iterate through slide
+* speed => integer of delay denoting milliseconds default = 20
+* iterations => iterations for the array. 0 denotes infinite,
+* ratio => ratio (float)
+* secondsout => we can set the the speed of the second part
 */
-  $.fn.writeText = function (contents, keep, seconds, delay = 20) {
-    var current = 0,
+  $.fn.writeText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout) {
+    let current = 0,
       count = 0,
       deviance = 1,
-      inTransPercent = .80,
-      outTransPercent = .20,
+      inTransPercent = ratio,
+      outTransPercent = 1 - ratio,
+      exit = false,
       elem = this;
 
     // here we have the initial animation that starts at 0 seconds - part 1
     setTimeout(function () {
-        var contentArray = contents[0].textContent.split("");
+        let contentArray = contents[0].textContent.split("");
 
         let maxInDelay = Math.floor((seconds * inTransPercent) * 1000 / contents[0].textContent.length);
         let timeoutAddCount = 0;
@@ -79,17 +83,20 @@
 
     }, 0);
 
-    // part starts after x seconds parameter
+    // part 2 starts after x seconds parameter
     function timeout() {
         setTimeout(function () {
             // Do Something Here
             // Then recall the parent function to
             // create a recursive loop.
-            var current = 0;
-
+            let current = 0;
+            // set speed of second part after first iteration
+            if (secondsout && count <= 1) {
+                seconds = secondsout;
+            }
             let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
 
-            var contentArray = contents[count % contents.length].textContent.split("");
+            let contentArray = contents[count % contents.length].textContent.split("");
 
             let timeoutAddCount2 = 0;
             function timeoutAdd2() {
@@ -97,29 +104,45 @@
                     //do stuff
                     if (current < contentArray.length && !keep) {
                         elem.text(elem.text() + contentArray[current++]);
-                    } else if (keep + current < contentArray.length) {
+                    }
+
+                    if (keep + current < contentArray.length) {
                         elem.text(elem.text() + contentArray[keep + current++]);
                     }
 
-
                     if (timeoutAddCount2 >= contents[count % contents.length].textContent.length) {
+                        // we can do error checking here
+                        if (keep && elem.text() != contents[(count) % contents.length].textContent) {
+                            // console.log(" error check", elem.text());
+                            elem.text(contents[(count) % contents.length].textContent);
+                        }
+
                         return;
                     }
                     timeoutAddCount2++;
 
-                    timeoutAdd2();
+                    if (!exit) {
+                        timeoutAdd2();
+                    }
 
                 }, (delay <= maxInDelay ? delay : maxInDelay));
             }
 
-            timeoutAdd2();
 
+            if (!exit) {
+                timeoutAdd2();
+            } else { return };
             // remove or subtract
             setTimeout(function () {
 
                 let maxOutDelay = Math.floor(1000 * (seconds * outTransPercent) / elem.text().length);
                 // this is incremented in part 2 afte we add (before of subtract) after 80%
                 count++;
+                //exit before - may need to tidy up at this point?
+                if (iterations && count > contents.length * iterations) {
+                    exit = true;
+                    return;
+                }
 
                 let timeoutSubtractCount2 = 0;
                 function timeoutSubract2() {
@@ -144,12 +167,17 @@
                         }
                         timeoutSubtractCount2++;
 
-                        timeoutSubract2();
+                        if (!exit) {
+                            timeoutSubract2();
+                        }
 
                     }, (delay <= maxOutDelay ? delay : maxOutDelay));
                 }
 
-                timeoutSubract2();
+                if (!exit) {
+                    timeoutSubract2();
+                } else { return };
+
 
                 setTimeout(function () {
                     // clean up if not using keep
@@ -158,19 +186,21 @@
                     }
                     //clean if we are using keep
                     if (keep && elem.text() != contents[count % contents.length].textContent.substr(0, keep)) {
-                        console.log("count", count);
-                        console.log("contents[count % contents.length].textContent", contents[count % contents.length].textContent);
-                        console.log("elem.text", elem.text());
                         elem.text(contents[count % contents.length].textContent.substr(0, keep));
                     }
                 }, Math.floor((1000 * outTransPercent * seconds) - deviance));
 
             }, Math.floor(1000 * inTransPercent * seconds));
 
-            timeout();
+            if (!exit) {
+                timeout();
+            } else { return };
+
         }, seconds * 1000);
     }
-    timeout();
+    if (!exit) {
+        timeout();
+      } else { return };
 
   };
 
@@ -178,12 +208,7 @@
 
 let animatetext = function(){
   let $elements = $(".tt-holder .tt");
-  $(".ttt").writeText($elements, 17, 5, 30);
+  $(".ttt").writeText($elements, 17, 2, 30, 1, 0.7, 3);
 }
-
+// old config  $(".ttt").writeText($elements, 17, 5, 30);
 $(animatetext) ;
-
-
-
-
-
