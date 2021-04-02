@@ -7,15 +7,27 @@
 * iterations => iterations for the array. 0 denotes infinite,
 * ratio => ratio (float)
 * secondsout => we can set the the speed of the second part
+* pause => string that denotes element that triggers pause
 */
-  $.fn.writeText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout) {
+  $.fn.writeText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout, pausetarget) {
     let current = 0,
       count = 0,
       deviance = 1,
       inTransPercent = ratio,
       outTransPercent = 1 - ratio,
       exit = false,
-      elem = this;
+      elem = this,
+      pause = false;
+
+      if (pausetarget) {
+          $("#" + pausetarget).on("click", function (e) {
+              e.preventDefault();
+              pause = !pause;
+            //   seeconds =
+            //   console.log(pause);
+          });
+      }
+
 
     // here we have the initial animation that starts at 0 seconds - part 1
     setTimeout(function () {
@@ -87,9 +99,8 @@
     function timeout() {
         setTimeout(function () {
             // Do Something Here
-            // Then recall the parent function to
-            // create a recursive loop.
-            let current = 0;
+            // reset a loop.
+            current = 0;
             // set speed of second part after first iteration
             if (secondsout && count <= 1) {
                 seconds = secondsout;
@@ -137,7 +148,7 @@
                 let maxOutDelay = Math.floor(1000 * (seconds * outTransPercent) / elem.text().length);
                 // this is incremented in part 2 after we add (before of subtract)
                 count++;
-                // exit before 
+                // exit before
                 if (iterations && count > contents.length * iterations) {
                     exit = true;
                     return;
@@ -180,33 +191,88 @@
 
                 setTimeout(function () {
                     // clean up if not using keep
-                    if (!keep && elem.text()) {
+                    if (!keep && elem.text() && !pause && vis()) {
+
                         elem.text("");
                     }
                     // clean if we are using keep
-                    if (keep && elem.text() != contents[count % contents.length].textContent.substr(0, keep)) {
+                    if (keep && elem.text() != contents[count % contents.length].textContent.substr(0, keep) && !pause && vis()) {
                         elem.text(contents[count % contents.length].textContent.substr(0, keep));
                     }
                 }, Math.floor((1000 * outTransPercent * seconds) - deviance));
 
             }, Math.floor(1000 * inTransPercent * seconds));
 
-            if (!exit) {
+            if (!exit && !pause && vis()) {
                 timeout();
+            }
+            if (!exit && (pause || !vis()) ) {
+                // console.log("noop02 vis", vis());
+                timeoutNoop();
             } else { return };
 
         }, seconds * 1000);
     }
-    if (!exit) {
-        timeout();
-      } else { return };
+
+      function timeoutNoop() {
+
+          setTimeout(function () {
+
+              if (!exit && !pause && vis()) {
+                  timeout();
+              }
+              if (!exit && (pause || !vis())) {
+                //   console.log("noop02 inside vis", vis());
+                  timeoutNoop();
+              } else {
+                   return; };
+
+          }, seconds * 1000);
+      }
+      if (!exit && !pause) {
+          timeout();
+      }
+
+      else {
+          console.log("return outer");
+
+          return; };
 
   };
 
 })(jQuery);
 
-let animatetext = function(){
-  let $elements = $(".tt-holder .tt");
-  $(".ttt").writeText($elements, 17, 2, 30, 1, 0.7, 3);
-}
-$(animatetext) ;
+/////////////////////////////////////////
+// main visibility API function
+// check if current tab is active or not
+var vis = (function () {
+    var stateKey,
+        eventKey,
+        keys = {
+            hidden: "visibilitychange",
+            webkitHidden: "webkitvisibilitychange",
+            mozHidden: "mozvisibilitychange",
+            msHidden: "msvisibilitychange"
+        };
+    for (stateKey in keys) {
+        if (stateKey in document) {
+            eventKey = keys[stateKey];
+            break;
+        }
+    }
+    return function (c) {
+        if (c) document.addEventListener(eventKey, c);
+        return !document[stateKey];
+    }
+})();
+
+$(document).ready(function () {
+    let animatetext = function () {
+        let $elements = $(".tt-holder .tt");
+        $(".ttt").writeText($elements, 17, 2, 30, 1, 0.7, 3 );
+    };
+    $(animatetext);
+});
+
+
+
