@@ -82,3 +82,7 @@ Float determing the relative value between when the animation starts and when it
 ### secondsout
 
 When using the `keep` feature (see above), when set, this parameter allows configuration over the speed of second and subsequent frames. This can be higher or lower than that of the first frame.
+
+### pausetarget
+
+string that is passed element to target for trigger e.g. input button

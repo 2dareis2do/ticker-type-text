@@ -7,7 +7,7 @@
 * iterations => iterations for the array. 0 denotes infinite,
 * ratio => ratio (float)
 * secondsout => we can set the the speed of the second part
-* pause => string that denotes element that triggers pause
+* pausetarget => string that is passed element to target for trigger e.g. input button
 */
   $.fn.writeText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout, pausetarget) {
     let current = 0,
@@ -273,6 +273,4 @@ $(document).ready(function () {
     };
     $(animatetext);
 });
-
-
 
