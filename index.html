@@ -12,8 +12,26 @@
 
 </head>
 <body>
-<form id="testtimer" action="">
+<form id="timerpause" action="">
   <input type="button" value="Pause"/>
+</form>
+
+<form id="timerstop" action="">
+  <input type="button" value="Stop"/>
+</form>
+
+<form id="timerstart" action="">
+  <label for="keep">Keep:</label><br>
+  <input type="text" id="keep" name="keep" value="17"><br>
+  <label for="seconds">Seconds:</label><br>
+  <input type="text" id="seconds" name="seconds" value="3"><br>
+  <label for="delay">delay:</label><br>
+  <input type="text" id="delay" name="delay" value="30"><br>
+  <label for="iterations">iterations:</label><br>
+  <input type="text" id="iterations" name="iterations" value="1"><br>
+  <label for="secondsout">secondsout:</label><br>
+  <input type="text" id="secondsout" name="secondsout" value="3"><br>
+  <input type="button" value="Update" name="update"/>
 </form>
 
 <div id="holder" class="text tt-holder">
