@@ -49,7 +49,7 @@
                 elem.text(text + textArray[current]);
                 current++
             }
-                //first time load
+            //first time load
 
             if (keep && current < textArray.length && count === 0) {
                 if (textArray[current] !== undefined) {
@@ -57,7 +57,7 @@
                 }
                 current++;
             }
-                            //after first time
+            //after first time
 
             if (keep && current < textArray.length && count > 0) {
                 if (textArray[current] !== undefined) {
@@ -137,6 +137,23 @@
             }
 
         }, (delay <= maxOutDelay ? delay : maxOutDelay));
+    }
+
+    function timeoutNoop() {
+
+        setTimeout(function () {
+
+            if (!exit && !pause && vis()) {
+
+                timeout();
+            }
+            if (!exit && (pause || !vis())) {
+                timeoutNoop();
+            } else {
+                return;
+            };
+
+        }, seconds * 1000);
     }
 
     function timeout() {
@@ -230,33 +247,15 @@
         }, initialTime );
     }
 
-    function timeoutNoop() {
-
-        setTimeout(function () {
-
-            if (!exit && !pause && vis()) {
-
-                timeout();
-            }
-            if (!exit && (pause || !vis())) {
-                timeoutNoop();
-            } else {
-                return; };
-
-        }, seconds * 1000);
-    }
-
-  if (!exit && !pause && vis()) {
-                var dx = new Date()
-                timeout();
-
-            }
+    if (!exit && !pause && vis()) {
+        var dx = new Date()
+        timeout();
+     }
 
     else {
         console.log("return outer");
         return; };
-
-  };
+    };
 
 })(jQuery);
 
