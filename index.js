@@ -18,8 +18,7 @@
       exit = false,
       elem = this,
       pause = false,
-      initialTime = 0,
-      d; // initialise
+      initialTime = 0;
 
       if (pausetarget) {
           $("#" + pausetarget).on("click", function (e) {
@@ -144,16 +143,12 @@
         setTimeout(function () {
             if (count === 0 ){
                 initialTime = seconds;
-
             }
 
             d = new Date();
 
             // start add immediately
             setTimeout(function () {
-                var start = new Date();
-
-                console.log("start inside, count", count, start.getTime() - d.getTime(), "microseconds");
                 if (!exit) {
                     timeoutAdd();
                 } else { return };
@@ -162,30 +157,21 @@
 
             // add first part tidy up (nested in second part (transition out)) nested
             setTimeout(function () {
-                var tidy = new Date();
-
-                console.log("start tidy, count", count, tidy.getTime() - d.getTime(), "microseconds");
-
                 // end cycle if iterations statrting is equal to items * iterations
                 if (iterations && count >= contents.length * iterations) {
                     exit = true;
-                    console.log("exit");
-                    console.log(elem.text());
                     return;
                 }
-                if (elem.text() != contents[(count) % contents.length].textContent && count === 0) {
+                let text = elem.text();
+
+                if (text != contents[(count) % contents.length].textContent && count === 0) {
                     elem.text(contents[(count) % contents.length].textContent);
                     current = contents[count % contents.length].textContent.length;
-                    // var firstend = new Date();
-                    // console.log("first part end, count", count, firstend.getTime() - d.getTime(), "microseconds");
                 }
 
-                if (elem.text() != contents[(count) % contents.length].textContent && count > 1) {
-                    // console.log("reset text add > 0", "contents[(count) % contents.length].textContent", contents[(count) % contents.length].textContent, "elem.text()", elem.text());
+                if (text != contents[(count) % contents.length].textContent && count > 1) {
                     elem.text(contents[count % contents.length].textContent);
                     current = contents[count % contents.length].textContent.length;
-                    // firstend = new Date();
-                    // console.log("first part end, count", count, firstend.getTime() - d.getTime(), "microseconds");
                 }
 
             }, Math.floor((1000 * inTransPercent * seconds) - deviance));
@@ -193,25 +179,22 @@
             // remove or subtract - transition out (part 2)
             setTimeout(function () {
 
-                var second = new Date();
-                console.log("second start, count", count, second.getTime() - d.getTime(), "microseconds");
-
                 if (!exit) {
                     timeoutSubtract();
                 } else { return };
-
 
             }, Math.floor(1000 * inTransPercent * seconds));
 
             // last part tidy up  (transition out))
             setTimeout(function () {
-                // clean up if not using keep
-                if (!keep && elem.text() && !pause && vis() && !exit) {
 
+                let text = elem.text();
+                // clean up if not using keep
+                if (!keep && text && !pause && vis() && !exit) {
                     elem.text("");
                 }
                 // clean if we are using keep
-                if (keep && elem.text() != contents[count % contents.length].textContent.substr(0, keep) && !pause && vis() && !exit) {
+                if (keep && text != contents[count % contents.length].textContent.substr(0, keep) && !pause && vis() && !exit) {
                     elem.text(contents[count % contents.length].textContent.substr(0, keep));
                 }
 
@@ -219,11 +202,7 @@
                 if (secondsout && count === 0) {
                     seconds = secondsout;
                     initialTime = seconds;
-
                 }
-
-                var lastend = new Date();
-                console.log("second part end, count", count, lastend.getTime() - d.getTime(), "microseconds");
 
                 // count incremented to denote a cycyle
                 if (!exit && !pause && vis()) {
@@ -232,15 +211,13 @@
                 // update text array after count increment
                     textArray = contents[count % contents.length].textContent.split("");
                     maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
-                    maxOutDelay = Math.floor(1000 * (seconds * outTransPercent) / elem.text().length);
+                    maxOutDelay = Math.floor(1000 * (seconds * outTransPercent) / text.length);
                 }
-                // console.log("textArray updated end", textArray);
 
                 if (!exit && !pause && vis()) {
                     // denotes new iteration
-                    // d = new Date();
-                    var dy = new Date();
-                    console.log("dx -dy, count", count, dy.getTime() - dx.getTime(), "microseconds");
+                    // var dy = new Date();
+                    // console.log("time for iterations dx - dy, count", count, dy.getTime() - dx.getTime(), "microseconds");
                     timeout();
                     dx = new Date();
 
@@ -248,7 +225,6 @@
                 if (!exit && (pause || !vis())) {
                     timeoutNoop();
                 } else { return };
-                // textArray = contents[count % contents.length].textContent.split("");
             }, Math.floor((1000 * seconds) - deviance));
 
         }, initialTime );
@@ -260,12 +236,9 @@
 
             if (!exit && !pause && vis()) {
 
-
                 timeout();
-
             }
             if (!exit && (pause || !vis())) {
-            //   console.log("noop02 inside vis", vis());
                 timeoutNoop();
             } else {
                 return; };
@@ -322,7 +295,7 @@ $(document).ready(function () {
     let secondsout = $('#timerstart').find('input[name="secondsout"]').val();
 
     let animatetext = function () {
-        $(".ttt").writeText($elements, 0, 2, 20, 1, 0.7, 3, "timerpause", "timerstop");
+        $(".ttt").writeText($elements, 17, 3, 20, 1, 0.7, 2);
     };
     $(animatetext);
 
@@ -335,12 +308,8 @@ $(document).ready(function () {
          let iterations = $('#timerstart').find('input[name="iterations"]').val();
          let secondsout = $('#timerstart').find('input[name="secondsout"]').val();
 
-        // console.log("keep", keep);
-
         animatetext = function () {
             $(".ttt").writeText($elements, keep, seconds, delay, iterations, 0.9, secondsout, "timerpause", "timerstop");
-            // $(".ttt").writeText($elements, 17, 2, 50, 2, 0.7, 3, "timerpause", "timerstop");
-
         };
         setTimeout(function () {
 
