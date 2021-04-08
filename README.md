@@ -2,11 +2,11 @@
 
 ## About
 
-This is a jQuery Plugin designed to mimick a typewriter or news ticker. I looked at for one but did not find one that did quite what I wanted so decided to create this one.
+This is a jQuery Plugin designed to mimick a typewriter or news ticker. I looked for one but did not find one that did quite what I wanted so decided to create this one.
 
 ## Requirements
 
-This has been tested to work with jQuery 2.1.3. or later. Not sure but should work with previous versions.
+This has been tested to work with jQuery 2.1.3. or later. Not sure but should also work with earlier versions.
 
 ## Use
 
@@ -61,7 +61,7 @@ A html collection or array object.
 
 ### keep
 
-Integer determining the number of text chars to keep between iterations e.g. 17
+Integer determining the number of text chars to keep between iterations e.g. 16
 
 ### seconds
 
