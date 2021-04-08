@@ -7,12 +7,14 @@
 * iterations => iterations for the array. 0 denotes infinite,
 * ratio => ratio (float)
 * secondsout => we can set the the speed of the second part
+* dev => dev mode boolean (false by default)
 * pausetarget => string that is passed element to target for trigger e.g. input button
+* stoptarget => string that is stopped element to target for trigger e.g. input button
 */
-    $.fn.writeText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout, pausetarget, stoptarget) {
+    $.fn.writeText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout, dev = false, pausetarget, stoptarget) {
     let current = 0,
       count = 0,
-      deviance = 10,
+      deviance = 20,
       inTransPercent = ratio,
       outTransPercent = 1 - ratio,
       exit = false,
@@ -23,7 +25,9 @@
       if (pausetarget) {
           $("#" + pausetarget).on("click", function (e) {
               e.preventDefault();
+              console.log("pause pressed", !pause);
               pause = !pause;
+
           });
       }
 
@@ -38,58 +42,42 @@
     let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
     let textArray = contents[count % contents.length].textContent.split("");
 
-    let timeoutAddCount = 0;
-
-    // recursive function
+    // add function
     function timeoutAdd() {
         setTimeout(function () {
 
             let text = elem.text();
             if (!keep && current < textArray.length) {
                 elem.text(text + textArray[current]);
-                current++
-            }
-            //first time load
 
+                current++;
+            }
+
+            //first time load
             if (keep && current < textArray.length && count === 0) {
                 if (textArray[current] !== undefined) {
                     elem.text(text + textArray[current]);
                 }
+
                 current++;
             }
-            //after first time
 
+            //after first time
             if (keep && current < textArray.length && count > 0) {
                 if (textArray[current] !== undefined) {
                     elem.text(text + textArray[current]);
                 }
+
                 current++;
             }
 
-            // console.log("current add", current)
-            if (!keep && timeoutAddCount >= contents[count % contents.length].textContent.length) {
-                // we can do error checking here
-                //reset add count
-                timeoutAddCount = 0;
-                // current = 0;
-                return;
-            }
-            if (keep && timeoutAddCount >= contents[count % contents.length].textContent.length && count === 0) {
-                // we can do error checking here
-                //reset add count
-                timeoutAddCount = 0;
-                // current = 0;
+            if (!keep && current >= textArray.length) {
                 return;
             }
 
-            if (keep && timeoutAddCount >= contents[count % contents.length].textContent.length - keep && count > 0) {
-                //reset add count
-                timeoutAddCount = 0;
-                // current = 0;
+            if (keep && current >= textArray.length) {
                 return;
             }
-
-            timeoutAddCount++;
 
             if (!exit) {
                 timeoutAdd();
@@ -98,39 +86,36 @@
         }, (delay <= maxInDelay ? delay : maxInDelay));
     }
 
-    let timeoutSubtractCount = 0;
     let maxOutDelay = Math.floor(1000 * (seconds * outTransPercent) / elem.text().length);
 
-    // recursive function
+    // subtract function
     function timeoutSubtract() {
         setTimeout(function () {
             //do stuff
+            let tempText;
+            if (elem.text().length > keep) {
+                tempText = elem.text().substring(0, elem.text().length - 1);
+            } else {
+                tempText = elem.text();
+            }
 
-            let temp = elem.text().substring(0, current);
-
-            if (keep && current > keep) {
-                elem.text(temp);
+            if (keep && current > keep ) {
+                elem.text(tempText);
                 current--;
             }
 
-            if (!keep && current > keep) {
-                elem.text(temp);
+            if (!keep && current > 0) {
+                elem.text(tempText);
                 current--;
             }
 
-            if (!keep && timeoutSubtractCount >= contents[count % contents.length].textContent.length) {
-                timeoutSubtractCount = 0;
-                elem.text(temp);
+            if (!keep && current === 0) {
                 return;
             }
 
-            if (keep && timeoutSubtractCount + keep >= contents[count % contents.length].textContent.length) {
-                timeoutSubtractCount = 0;
-                elem.text(temp);
+            if (keep && current <= keep) {
                 return;
             }
-
-            timeoutSubtractCount++;
 
             if (!exit) {
                 timeoutSubtract();
@@ -139,12 +124,12 @@
         }, (delay <= maxOutDelay ? delay : maxOutDelay));
     }
 
+    // noop
     function timeoutNoop() {
 
         setTimeout(function () {
 
             if (!exit && !pause && vis()) {
-
                 timeout();
             }
             if (!exit && (pause || !vis())) {
@@ -153,16 +138,13 @@
                 return;
             };
 
-        }, seconds * 1000);
+        }, initialTime );
     }
 
     function timeout() {
         setTimeout(function () {
-            if (count === 0 ){
-                initialTime = seconds;
-            }
 
-            d = new Date();
+            if (dev) {   d = new Date(); }
 
             // start add immediately
             setTimeout(function () {
@@ -172,23 +154,30 @@
 
             }, 0);
 
-            // add first part tidy up (nested in second part (transition out)) nested
+            // add first part tidy up (transition out)
             setTimeout(function () {
-                // end cycle if iterations statrting is equal to items * iterations
-                if (iterations && count >= contents.length * iterations) {
-                    exit = true;
-                    return;
-                }
+
                 let text = elem.text();
 
-                if (text != contents[(count) % contents.length].textContent && count === 0) {
+                if (text != contents[(count) % contents.length].textContent && count === 0 && !exit) {
                     elem.text(contents[(count) % contents.length].textContent);
                     current = contents[count % contents.length].textContent.length;
                 }
 
-                if (text != contents[(count) % contents.length].textContent && count > 1) {
+                if (text != contents[(count) % contents.length].textContent && count > 1 && !exit) {
                     elem.text(contents[count % contents.length].textContent);
                     current = contents[count % contents.length].textContent.length;
+                }
+
+                // end cycle if iterations starting is equal to items * iterations
+                if (iterations && count >= contents.length * iterations) {
+                    exit = true;
+                    // denotes new iteration
+                    if (dev) {
+                        var dy = new Date();
+                        console.log("time for iterations dx - dy, count final", count, dy.getTime() - dx.getTime(), "microseconds"); }
+
+                    return;
                 }
 
             }, Math.floor((1000 * inTransPercent * seconds) - deviance));
@@ -202,16 +191,16 @@
 
             }, Math.floor(1000 * inTransPercent * seconds));
 
-            // last part tidy up  (transition out))
+            // last part tidy up (transition out))
             setTimeout(function () {
 
                 let text = elem.text();
                 // clean up if not using keep
-                if (!keep && text && !pause && vis() && !exit) {
+                if (!keep && text && !exit) {
                     elem.text("");
                 }
                 // clean if we are using keep
-                if (keep && text != contents[count % contents.length].textContent.substr(0, keep) && !pause && vis() && !exit) {
+                if (keep && text != contents[count % contents.length].textContent.substr(0, keep) && !exit) {
                     elem.text(contents[count % contents.length].textContent.substr(0, keep));
                 }
 
@@ -221,8 +210,8 @@
                     initialTime = seconds;
                 }
 
-                // count incremented to denote a cycyle
-                if (!exit && !pause && vis()) {
+                // count incremented to denote a cycle
+                if (!exit && (!pause || vis())) {
                     count++;
 
                 // update text array after count increment
@@ -233,22 +222,31 @@
 
                 if (!exit && !pause && vis()) {
                     // denotes new iteration
-                    // var dy = new Date();
-                    // console.log("time for iterations dx - dy, count", count, dy.getTime() - dx.getTime(), "microseconds");
+                    if (dev) {
+                        var dy = new Date();
+                        console.log("time for iterations dx - dy, count", count, dy.getTime() - dx.getTime(), "microseconds");
+                    }
+
                     timeout();
-                    dx = new Date();
+                    if (dev) {
+                        dx = new Date();
+                    }
 
                 }
                 if (!exit && (pause || !vis())) {
                     timeoutNoop();
-                } else { return };
+                }
+                else { return };
             }, Math.floor((1000 * seconds) - deviance));
 
         }, initialTime );
     }
 
     if (!exit && !pause && vis()) {
-        var dx = new Date()
+        if (dev) {
+            var dx = new Date();
+        }
+
         timeout();
      }
 
@@ -286,15 +284,9 @@ var vis = (function () {
 $(document).ready(function () {
 
     let $elements = $(".tt-holder .tt");
-    let keep = $('#timerstart').find('input[name="keep"]').val();
-    let seconds = $('#timerstart').find('input[name="seconds"]').val();
-    let delay = $('#timerstart').find('input[name="delay"]').val();
-    let iterations = $('#timerstart').find('input[name="iterations"]').val();
-    // console.log(iterations);
-    let secondsout = $('#timerstart').find('input[name="secondsout"]').val();
 
     let animatetext = function () {
-        $(".ttt").writeText($elements, 17, 3, 20, 1, 0.7, 2);
+        $(".ttt").writeText($elements, 16, 3, 30, 1, 0.5, 2, false, "timerpause", "timerstop");
     };
     $(animatetext);
 
@@ -316,7 +308,5 @@ $(document).ready(function () {
 
         }, 0);
 
-        // pause = !pause;
     });
 });
-
