@@ -49,7 +49,7 @@ The ticker can be instantiated like so:
 ```
 let animatetext = function(){
   let $elements = $(".tt-holder .tt");
-  $(".ttt").writeText($elements, 17, 2, 30, 1, 0.7, 3);
+  $(".ttt").tickerText($elements, 17, 2, 30, 1, 0.7, 3);
 }
 $(animatetext) ;
 

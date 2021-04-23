@@ -1,18 +1,18 @@
 (function ($) {
     /*
-    * @param (array) contents
-    * @param (integer) keep denoting the number characters to keep
-    * @param (integer) seconds denoting number of seconds it takes to iterate through slide
-    * @param (integer) delay number of milliseconds delay between hiding and showing each character default = 20 - note this
-    * @param (integer) @iterations => iterations for the array. 0 denotes infinite,
-    * @param (float) @ratio => ratio (float)
-    * @param (integer) @secondsout => we can set the the speed of the second part
-    * @param (boolean) @dev => dev mode boolean (false by default)
-    * @param (string) @pausetarget => string that is a passed element to target for trigger e.g. input button
-    * @param (string) @stoptarget => string that is a stopped element to target for trigger e.g. input button
+    * @param (array) contents of text elments or nodes
+    * @param (integer) keep denotes the number characters to keep when transitionong out
+    * @param (integer) seconds it takes to iterate through slide
+    * @param (integer) delay number of milliseconds delay between hiding and showing each character default = 20
+    * @param (integer) iterations for the text ticker to cycle through all elements. 0 denotes infinite,
+    * @param (float) ratio used for setting both when transition in and out starts
+    * @param (integer) secondsout so we can set the the speed of the second part if using keep
+    * @param (boolean) dev mode boolean (false by default)
+    * @param (string) pausetarget element to target for trigger e.g. input button
+    * @param (string) stoptarget element to target for trigger e.g. input button
     * @return null
     */
-    $.fn.writeText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout, dev = false, pausetarget, stoptarget) {
+    $.fn.tickerText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout, dev = false, pausetarget, stoptarget) {
         let current = 0, //state
         count = 0, //state
         deviance = 20,
@@ -24,9 +24,6 @@
         initialTime = 0,
         dx,
         dy;
-
-        // console.log("this.text vs elem.text()", this.text(), elem.text());
-
 
         if (pausetarget) {
             $("#" + pausetarget).on("click", function (e) {
@@ -298,7 +295,7 @@ $(document).ready(function () {
     let $elements = $(".tt-holder .tt");
 
     let animatetext = function () {
-        $(".ttt").writeText($elements, 16, 3, 30, 1, 0.5, 2, true, "timerpause", "timerstop");
+        $(".ttt").tickerText($elements, 16, 3, 30, 1, 0.5, 2, true, "timerpause", "timerstop");
     };
     $(animatetext);
 
@@ -312,7 +309,7 @@ $(document).ready(function () {
          let secondsout = $('#timerstart').find('input[name="secondsout"]').val();
 
         animatetext = function () {
-            $(".ttt").writeText($elements, keep, seconds, delay, iterations, 0.9, secondsout, "timerpause", "timerstop");
+            $(".ttt").tickerText($elements, keep, seconds, delay, iterations, 0.9, secondsout, "timerpause", "timerstop");
         };
         setTimeout(function () {
 
