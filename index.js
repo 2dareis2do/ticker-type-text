@@ -22,13 +22,31 @@
         elem = this,
         pause = false,
         initialTime = 0,
+        da,
+        dat,
+        dtm,
+        dto,
+        ds,
         dx,
-        dy;
+        dxx,
+        dy,
+        dz,
+        masterTimelineTimer,
+        masterTimelineTimerAdd,
+        timelineTimerAdd,
+        timelineTimerAddNoop,
+        timelineTimerSubract,
+        timelineTimerSubtractNoop,
+        timelineTimerNoop,
+        masterTimelineTimerAddTidy,
+        masterTimelineTimerSubtract,
+        masterTimelineTimerSubtractTidy;
 
         if (pausetarget) {
             $("#" + pausetarget).on("click", function (e) {
                 e.preventDefault();
-                console.log("pause pressed", !pause);
+                // console.log("pause pressed", !pause);
+                console.log("initialTime", initialTime)
                 pause = !pause;
 
             });
@@ -37,7 +55,7 @@
         if (stoptarget) {
             $("#" + stoptarget).on("click", function (e) {
                 e.preventDefault();
-                console.log("stop");
+                // console.log("stop");
                 exit = !exit;
             });
         }
@@ -45,37 +63,98 @@
         let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
         let textArray = contents[count % contents.length].textContent.split("");
 
+        // needs to be able to start everythng again immediately
+        function restart() {
+            clearTimeout(masterTimelineTimerAdd);
+            clearTimeout(masterTimelineTimerAddTidy);
+            clearTimeout(masterTimelineTimerSubtract);
+            clearTimeout(masterTimelineTimerSubtractTidy);
+        }
+
+        function timeoutAddNoop() {
+            timelineTimerAddNoop = setTimeout(function () {
+                if (!exit && !pause && vis()) {
+                    clearTimeout(timelineTimerAddNoop);
+                    return;
+                }
+                if (!exit && (pause || !vis())) {
+                    if (dev) {
+                        dto = performance.now();
+                        console.log("timeline add Noop timelineNoop for iterations dxx - dyy, count final", count, dtn - dto, "microseconds");
+                    }
+                    timeoutAddNoop();
+                } if (exit) {
+                    clearInterval(timelineTimerAddNoop);
+                    return;
+                };
+
+            }, maxInDelay);
+        }
+
+        function timeoutSubtractNoop() {
+            if (dev) {
+                dtn = performance.now();
+            }
+            timelineTimerSubtractNoop = setTimeout(function () {
+
+                if (!exit && !pause && vis()) {
+                    // if (dev) {
+                    //     dx = performance.now();
+                    // }
+                    if (dev) {
+                        dto = performance.now();
+                        console.log("timeline subtract Noop end  dxx - dyy, count final", count, dtn - dto, "microseconds");
+                    }
+                    // timeoutSubtract();
+                    clearTimeout(timelineTimerSubtractNoop);
+                    // restart();
+                    // timeline();
+                }
+                if (!exit) {
+                    if (dev) {
+                        dto = performance.now();
+                        console.log("timeline subtract Noop  dxx - dyy, count final", count, dtn - dto, "microseconds");
+                    }
+                    timeoutSubtractNoop();
+                } if (exit) {
+                    clearInterval(timelineTimerSubtractNoop);
+                    return;
+                };
+
+            }, maxOutDelay);
+        }
+
         // add function
         function timeoutAdd() {
-            setTimeout(function () {
+            timelineTimerAdd = setTimeout(function () {
+                // first check if visible
+                // if (pause || !vis()) {
+                //     timeoutAddNoop();
+                // }
 
                 let text = elem.text();
-                if (!keep && current < textArray.length) {
+                if (!keep && current < textArray.length ) {
                     elem.text(text + textArray[current]);
                     current++;
                 }
-                //first time load
-                if (keep && current < textArray.length && count === 0) {
+
+                if (keep && current < textArray.length && count >= 0) {
                     if (textArray[current] !== undefined) {
                         elem.text(text + textArray[current]);
                     }
                     current++;
                 }
-                //after first time
-                if (keep && current < textArray.length && count > 0) {
-                    if (textArray[current] !== undefined) {
-                        elem.text(text + textArray[current]);
+                if (current >= textArray.length) {
+                    if (dev) {
+                        da = performance.now();
+                        console.log("completed pt1 ", da - dx, "microseconds", "text", elem.text());
                     }
-                    current++;
-                }
-                if (!keep && current >= textArray.length) {
-                    return;
-                }
-                if (keep && current >= textArray.length) {
+                    clearInterval(timelineTimerAdd);
                     return;
                 }
 
                 if (!exit) {
+                    clearInterval(timelineTimerAdd);
                     timeoutAdd();
                 }
 
@@ -86,30 +165,46 @@
 
         // subtract function
         function timeoutSubtract() {
-            setTimeout(function () {
+            timelineTimerSubract = setTimeout(function () {
+
+    //  first check if visible
+                // if (pause || !vis()) {
+                //     timeoutSubtractNoop();
+                // }
+
                 //do stuff
                 let tempText;
                 if (elem.text().length > keep) {
                     tempText = elem.text().substring(0, elem.text().length - 1);
-                } else {
+                }
+                else {
                     tempText = elem.text();
                 }
 
-                if (keep && current > keep ) {
+                // if (keep && current > keep ) {
+                //     elem.text(tempText);
+                //     current--;
+                // }
+
+                // if (!keep && current > 0) {
+                //     elem.text(tempText);
+                //     current--;
+                // }
+
+                if (current > 0 ) {
                     elem.text(tempText);
                     current--;
                 }
 
-                if (!keep && current > 0) {
-                    elem.text(tempText);
-                    current--;
-                }
+                // if (!keep && current === 0) {
+                //     return;
+                // }
 
-                if (!keep && current === 0) {
-                    return;
-                }
-
-                if (keep && current <= keep) {
+                if (current <= keep) {
+                    if (dev) {
+                        ds = performance.now();
+                        console.log("completed pt3 ", ds - dx, "microseconds", "text", elem.text());
+                    }
                     return;
                 }
 
@@ -117,105 +212,123 @@
                     timeoutSubtract();
                 }
 
+
+
             }, (delay <= maxOutDelay ? delay : maxOutDelay));
         }
 
         // noop
         function timelineNoop() {
 
-            if (dev) {
-                dx = performance.now();
-            }
-            setTimeout(function () {
+            // if (dev) {
+            //     dxx = performance.now();
+            // }
+            timelineTimerNoop = setTimeout(function () {
 
                 if (!exit && !pause && vis()) {
-                    if (dev) {
-                        dx = performance.now();
-                    }
-
+                    // if (dev) {
+                    //     dx = performance.now();
+                    // }
+                    // if (dev) {
+                    //     dyy = performance.now();
+                    //     console.log("timeline Noop end  for iterations dxx - dyy, count final", count, dyy - dxx, "microseconds");
+                    // }
+                    // restart();
+                    // timeline();
+                    clearTimeout(timelineTimerNoop);
                     timeline();
+
+                    return;
                 }
                 if (!exit && (pause || !vis())) {
-                    if (dev) {
-                        var dx = performance.now();
-                        console.log("timelineNoop timelineNoop  for iterations dx - dy, count final", count, dy - dx, "microseconds");
-                    }
-
+                    // if (dev) {
+                    //     dyy = performance.now();
+                    //     console.log("timeline Noop  for iterations dxx - dyy, count final", count, dyy - dxx, "microseconds");
+                    // }
                     timelineNoop();
-                } else {
+                } if (exit) {
+                    clearInterval(timelineTimerNoop);
                     return;
                 };
 
-            }, 0 );
+            }, maxInDelay );
         }
 
         function timeline() {
-            setTimeout(function () {
 
-                // if (dev) { d = performance.now(); }
+            // master timer - initially set to 0 then repeats depending on value of initialTime
+            // initial time set to seconds (which also depends on the value of secondOut) after first iteration
+            masterTimelineTimer = setTimeout(function () {
+
                 if (dev) {
                     dx = performance.now();
                     console.log("count", count);
                 }
-                // start add immediately
-                setTimeout(function () {
+
+                // add immediately - pt1
+                masterTimelineTimerAdd = setTimeout(function () {
                     if (!exit) {
                         timeoutAdd();
-                    } else { return };
+                    } else {
+                        clearTimeout(masterTimelineTimerAdd);
+                        return;
+                    };
 
                 }, 0);
 
-                // add first part tidy up (transition out)
-                setTimeout(function () {
+                // add tidy up - pt2
+                masterTimelineTimerAddTidy = setTimeout(function () {
 
                     let text = elem.text();
 
-                    if (text != contents[(count) % contents.length].textContent && count === 0 && !exit) {
-                        elem.text(contents[(count) % contents.length].textContent);
+                    if (text != contents[(count) % contents.length].textContent && count >= 1 && !exit && (vis() && !pause)) {
+                        elem.text(contents[count % contents.length].textContent);
                         current = contents[count % contents.length].textContent.length;
                     }
 
-                    if (text != contents[(count) % contents.length].textContent && count > 1 && !exit) {
-                        elem.text(contents[count % contents.length].textContent);
-                        current = contents[count % contents.length].textContent.length;
+                    if (dev) {
+                        dat = performance.now();
+                        console.log("completed pt2", dat - dx, "microseconds", "text", elem.text());
                     }
 
                     // end cycle if iterations starting is equal to items * iterations
                     if (iterations && count >= contents.length * iterations) {
                         exit = true;
                         // denotes new iteration
-                        if (dev) {
-                            dy = performance.now();
-                            console.log("time for last iteration, keep", dy - dx, "microseconds", "text", elem.text()); }
 
+                        clearTimeout(masterTimelineTimerAddTidy);
                         return;
                     }
 
                 }, Math.floor((1000 * inTransPercent * seconds) - deviance));
 
-                // remove or subtract - transition out (part 2)
-                setTimeout(function () {
-
+                // subtract - pt 3
+                masterTimelineTimerSubtract = setTimeout(function () {
                     if (!exit) {
+                        // if (dev) {
+                        //     dz = performance.now();
+                        //     console.log("starting subtract - pt3 ", dz - dx, "microseconds", "text", elem.text());
+                        // }
+
                         timeoutSubtract();
                     } else { return };
 
                 }, Math.floor(1000 * inTransPercent * seconds));
 
-                // last part tidy up (transition out))
-                setTimeout(function () {
+                // last part tidy up - pt 4
+                masterTimelineTimerSubtractTidy = setTimeout(function () {
 
                     let text = elem.text();
                     // clean up if not using keep
-                    if (!keep && text && !exit) {
+                    if (!keep && text && !exit && (vis() && !pause)) {
                         elem.text("");
                     }
                     // clean if we are using keep
-                    if (keep && text != contents[count % contents.length].textContent.substr(0, keep) && !exit) {
+                    if (keep && text != contents[count % contents.length].textContent.substr(0, keep) && !exit && (vis() && !pause)) {
                         elem.text(contents[count % contents.length].textContent.substr(0, keep));
                     }
 
-                    // set speed of next iteration is set do this last after previous calculations
+                    // set speed of next iteration if using 2nd speed parameter
                     if (secondsout && count === 0) {
                         seconds = secondsout;
                         initialTime = seconds;
@@ -236,23 +349,20 @@
                         // denotes new iteration
                         if (dev) {
                             dy = performance.now();
-                            console.log("time for iteration",  dy - dx, "microseconds", "text", elem.text());
+                            console.log("completed pt4",  dy - dx, "microseconds", "text", elem.text());
                         }
-
-                        // recurse
-                        // console.log("this.text vs elem.text()", this,  elem.text());
 
                         timeline();
 
                     }
                     if (!exit && (pause || !vis())) {
 
-                        if (dev) {
-                            dx = performance.now();
-                        }
+                        clearTimeout(masterTimelineTimer);
+
                         timelineNoop();
                     }
-                    else {
+                    if (exit) {
+                        clearTimeout(masterTimelineTimer);
                         return;
                     };
                 }, Math.floor((1000 * seconds) - deviance));
@@ -295,7 +405,7 @@ $(document).ready(function () {
     let $elements = $(".tt-holder .tt");
 
     let animatetext = function () {
-        $(".ttt").tickerText($elements, 16, 3, 30, 1, 0.5, 2, true, "timerpause", "timerstop");
+        $(".ttt").tickerText($elements, 16, 5, 100, 1, 0.5, 5, true, "timerpause", "timerstop");
     };
     $(animatetext);
 
