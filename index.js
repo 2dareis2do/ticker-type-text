@@ -45,8 +45,8 @@
         if (pausetarget) {
             $("#" + pausetarget).on("click", function (e) {
                 e.preventDefault();
-                // console.log("pause pressed", !pause);
-                console.log("initialTime", initialTime)
+                console.log("pause pressed", !pause);
+                // console.log("initialTime", initialTime)
                 pause = !pause;
 
             });
@@ -258,7 +258,7 @@
 
             // master timer - initially set to 0 then repeats depending on value of initialTime
             // initial time set to seconds (which also depends on the value of secondOut) after first iteration
-            masterTimelineTimer = setTimeout(function () {
+            // masterTimelineTimer = setTimeout(function () {
 
                 if (dev) {
                     dx = performance.now();
@@ -357,17 +357,17 @@
                     }
                     if (!exit && (pause || !vis())) {
 
-                        clearTimeout(masterTimelineTimer);
-
+                        // clearTimeout(masterTimelineTimer);
+                        restart();
                         timelineNoop();
                     }
                     if (exit) {
-                        clearTimeout(masterTimelineTimer);
+                        // clearTimeout(masterTimelineTimer);
                         return;
                     };
                 }, Math.floor((1000 * seconds) - deviance));
 
-            }, initialTime );
+            // }, initialTime );
         }
 
         //init
