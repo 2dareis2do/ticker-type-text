@@ -24,7 +24,6 @@
         da,
         daDif,
         dat,
-        dto,
         ds,
         dx,
         dxx,
@@ -32,8 +31,6 @@
         dy,
         timelineTimerAdd,
         timelineTimerSubract,
-        timelineTimerAddNoop,
-        timelineTimerSubtractNoop,
         timelineTimerNoop,
         masterTimelineTimerAdd,
         masterTimelineTimerAddTidy,
@@ -70,61 +67,9 @@
             clearTimeout(timelineTimerSubract);
         }
 
-        function timeoutAddNoop() {
-            timelineTimerAddNoop = setTimeout(function () {
-                if (!exit && !pause && vis()) {
-                    clearTimeout(timelineTimerAddNoop);
-                    return;
-                }
-                if (!exit && (pause || !vis())) {
-                    if (dev) {
-                        dto = performance.now();
-                        console.log("timeline add Noop timelineNoop for iterations dxx - dyy, count final", count, dtn - dto, "microseconds");
-                    }
-                    timeoutAddNoop();
-                } if (exit) {
-                    clearInterval(timelineTimerAddNoop);
-                    return;
-                };
-
-            }, maxInDelay);
-        }
-
-        function timeoutSubtractNoop() {
-            if (dev) {
-                dtn = performance.now();
-            }
-            timelineTimerSubtractNoop = setTimeout(function () {
-
-                if (!exit && !pause && vis()) {
-                    if (dev) {
-                        dto = performance.now();
-                        console.log("timeline subtract Noop end  dxx - dyy, count final", count, dtn - dto, "microseconds");
-                    }
-                    clearTimeout(timelineTimerSubtractNoop);
-                    return;
-                }
-                if (!exit) {
-                    if (dev) {
-                        dto = performance.now();
-                        console.log("timeline subtract Noop  dxx - dyy, count final", count, dtn - dto, "microseconds");
-                    }
-                    timeoutSubtractNoop();
-                } if (exit) {
-                    clearInterval(timelineTimerSubtractNoop);
-                    return;
-                };
-
-            }, maxOutDelay);
-        }
-
         // add function
         function timeoutAdd() {
             timelineTimerAdd = setTimeout(function () {
-                // first check if visible
-                // if (pause || !vis()) {
-                //     timeoutAddNoop();
-                // }
 
                 let text = elem.text();
                 if (!keep && current < textArray.length ) {
@@ -151,7 +96,6 @@
                     clearInterval(timelineTimerAdd);
                     part2();
                     return;
-
                 }
 
                 if (!exit) {
@@ -167,11 +111,6 @@
         // subtract function
         function timeoutSubtract() {
             timelineTimerSubract = setTimeout(function () {
-
-        // first check if visible
-                // if (pause || !vis()) {
-                //     timeoutSubtractNoop();
-                // }
 
                 //do stuff
                 let tempText;
@@ -218,14 +157,10 @@
             timelineTimerNoop = setTimeout(function () {
 
                 if (!exit && !pause && vis()) {
-                    // if (dev) {
-                    //     dx = performance.now();
-                    // }
                     if (dev) {
                         dyy = performance.now();
                         console.log("timeline Noop end for iterations dxx - dyy, count final", count, dyy - dxx, "microseconds");
                     }
-                    // timeline();
                     clearTimeout(timelineTimerNoop);
                     //restart
                     timeline();
@@ -251,7 +186,6 @@
                     timeoutAdd();
                 } else {
                     clearTimeout(masterTimelineTimerAdd);
-                   // part2();
                     return;
                 };
 
@@ -397,34 +331,3 @@ var vis = (function () {
         return !document[stateKey];
     }
 })();
-
-$(document).ready(function () {
-
-    let $elements = $(".tt-holder .tt");
-
-    let animatetext = function () {
-        $(".ttt").tickerText($elements, 16, 3, 100, 1, 0.5, 2, false, "timerpause", "timerstop");
-    };
-    $(animatetext);
-
-    // massaga variables
-    $("#timerstart input[name='update']").on("click", function (e) {
-        e.preventDefault();
-        let keep = $('#timerstart').find('input[name="keep"]').val();
-         let seconds = $('#timerstart').find('input[name="seconds"]').val();
-         let delay = $('#timerstart').find('input[name="delay"]').val();
-         let iterations = $('#timerstart').find('input[name="iterations"]').val();
-         let secondsout = $('#timerstart').find('input[name="secondsout"]').val();
-
-        animatetext = function () {
-            $(".ttt").tickerText($elements, keep, seconds, delay, iterations, 0.9, secondsout, "timerpause", "timerstop");
-        };
-        setTimeout(function () {
-
-        $(animatetext);
-
-        }, 0);
-
-    });
-});
-
