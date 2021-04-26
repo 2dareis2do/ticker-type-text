@@ -8,6 +8,12 @@ This is a jQuery Plugin designed to mimick a typewriter or news ticker. I looked
 
 This has been tested to work with jQuery 2.1.3. or later. Not sure but should also work with earlier versions.
 
+## Dependencies
+
+https://github.com/2dareis2do/vis
+
+Simple javascript tool to tell if current tab is visible or not.
+
 ## Use
 
 This is designed to take a html collection and transform this into ticker type text output in the browser.
