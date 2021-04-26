@@ -141,11 +141,9 @@
                 if (current >= textArray.length) {
                     da = performance.now();
                     daDif = da - dx;
-                    // console.log("daDif diff", daDif);
                     if (daDif >= (1000 * inTransPercent * seconds) - deviance ) {
                         daDif = 0;
                     }
-                    console.log("daDif diff", (1000 * inTransPercent * seconds) - deviance - daDif );
                     if (dev) {
                         da = performance.now();
                         console.log("completed pt1 ", da - dx, "microseconds", "text", elem.text());
@@ -195,7 +193,6 @@
                     if (dsDiff >= (1000 * outTransPercent * seconds) - deviance) {
                         dsDiff = 0;
                     }
-                    console.log("dsDiff diff", (1000 * outTransPercent * seconds) - deviance - dsDiff);
                     if (dev) {
                         console.log("completed pt3 ", ds - dx, "microseconds", "text", elem.text());
                     }
@@ -273,7 +270,6 @@
 
                 dat = performance.now();
                 if (dev) {
-                    // dat = performance.now();
                     console.log("completed pt2", dat - dx, "microseconds", "text", elem.text());
                 }
 
@@ -283,7 +279,6 @@
                 if (iterations && count >= contents.length * iterations) {
                     exit = true;
                     // denotes new iteration
-
                     clearTimeout(masterTimelineTimerAddTidy);
                     return;
 
@@ -355,7 +350,6 @@
                 };
             }, Math.floor((1000 * outTransPercent * seconds) - deviance - dsDiff));
 
-            // }, Math.floor((1000 * seconds) - deviance));
         }
 
         function timeline() {
@@ -371,14 +365,6 @@
 
             // add immediately - pt1
             part1();
-
-            // add tidy up - pt2
-            // part2();
-
-            // subtract - pt 3
-            // part3();
-            // last part tidy up - pt 4
-            // part4();
 
         }
 
@@ -417,7 +403,7 @@ $(document).ready(function () {
     let $elements = $(".tt-holder .tt");
 
     let animatetext = function () {
-        $(".ttt").tickerText($elements, 16, 5, 100, 1, 0.5, 5, true, "timerpause", "timerstop");
+        $(".ttt").tickerText($elements, 16, 3, 100, 1, 0.5, 2, false, "timerpause", "timerstop");
     };
     $(animatetext);
 
