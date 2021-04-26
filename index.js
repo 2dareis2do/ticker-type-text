@@ -22,11 +22,13 @@
         elem = this,
         pause = false,
         da,
+        daDif,
         dat,
         dto,
         ds,
         dx,
         dxx,
+        dyy,
         dy,
         timelineTimerAdd,
         timelineTimerSubract,
@@ -137,12 +139,21 @@
                     current++;
                 }
                 if (current >= textArray.length) {
+                    da = performance.now();
+                    daDif = da - dx;
+                    // console.log("daDif diff", daDif);
+                    if (daDif >= (1000 * inTransPercent * seconds) - deviance ) {
+                        daDif = 0;
+                    }
+                    console.log("daDif diff", (1000 * inTransPercent * seconds) - deviance - daDif );
                     if (dev) {
                         da = performance.now();
                         console.log("completed pt1 ", da - dx, "microseconds", "text", elem.text());
                     }
                     clearInterval(timelineTimerAdd);
+                    part2();
                     return;
+
                 }
 
                 if (!exit) {
@@ -179,11 +190,17 @@
                 }
 
                 if (current <= keep) {
+                    ds = performance.now();
+                    dsDiff = ds - dat;
+                    if (dsDiff >= (1000 * outTransPercent * seconds) - deviance) {
+                        dsDiff = 0;
+                    }
+                    console.log("dsDiff diff", (1000 * outTransPercent * seconds) - deviance - dsDiff);
                     if (dev) {
-                        ds = performance.now();
                         console.log("completed pt3 ", ds - dx, "microseconds", "text", elem.text());
                     }
                     clearTimeout(timelineTimerSubract);
+                    part4();
                     return;
                 }
 
@@ -231,28 +248,20 @@
             }, maxInDelay );
         }
 
-        function timeline() {
-
-            // initially set to 0 then repeats depending on value of initialTime
-            // initial time set to seconds (which also depends on the value of secondOut) after first iteration
-
-            if (dev) {
-                dx = performance.now();
-                console.log("count", count);
-            }
-
-            // add immediately - pt1
+        function part1() {
             masterTimelineTimerAdd = setTimeout(function () {
                 if (!exit) {
                     timeoutAdd();
                 } else {
                     clearTimeout(masterTimelineTimerAdd);
+                   // part2();
                     return;
                 };
 
             }, 0);
+        }
 
-            // add tidy up - pt2
+        function part2() {
             masterTimelineTimerAddTidy = setTimeout(function () {
 
                 let text = elem.text();
@@ -262,10 +271,13 @@
                     current = contents[count % contents.length].textContent.length;
                 }
 
+                dat = performance.now();
                 if (dev) {
-                    dat = performance.now();
+                    // dat = performance.now();
                     console.log("completed pt2", dat - dx, "microseconds", "text", elem.text());
                 }
+
+                part3();
 
                 // end cycle if iterations starting is equal to items * iterations
                 if (iterations && count >= contents.length * iterations) {
@@ -274,21 +286,27 @@
 
                     clearTimeout(masterTimelineTimerAddTidy);
                     return;
+
                 }
 
-            }, Math.floor((1000 * inTransPercent * seconds) - deviance));
+            }, Math.floor((1000 * inTransPercent * seconds) - deviance - daDif));
+        }
 
-            // subtract - pt 3
+        function part3() {
             masterTimelineTimerSubtract = setTimeout(function () {
                 if (!exit) {
                     timeoutSubtract();
                 } else {
+                    clearTimeout(masterTimelineTimerSubtract);
                     return;
                 };
 
-            }, Math.floor(1000 * inTransPercent * seconds));
+            }, 0);
 
-            // last part tidy up - pt 4
+        }
+
+        function part4() {
+
             masterTimelineTimerSubtractTidy = setTimeout(function () {
 
                 let text = elem.text();
@@ -304,7 +322,6 @@
                 // set speed of next iteration if using 2nd speed parameter
                 if (secondsout && count === 0) {
                     seconds = secondsout;
-                    // initialTime = seconds;
                     // update maxInDelay
                     maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
                     // update maxutDelay
@@ -322,7 +339,7 @@
                     // denotes new iteration
                     if (dev) {
                         dy = performance.now();
-                        console.log("completed pt4",  dy - dx, "microseconds", "text", elem.text());
+                        console.log("completed pt4", dy - dx, "microseconds", "text", elem.text());
                     }
                     reset();
                     timeline();
@@ -336,11 +353,36 @@
                 if (exit) {
                     return;
                 };
-            }, Math.floor((1000 * seconds) - deviance));
+            }, Math.floor((1000 * outTransPercent * seconds) - deviance - dsDiff));
+
+            // }, Math.floor((1000 * seconds) - deviance));
+        }
+
+        function timeline() {
+
+            // initially set to 0 then repeats depending on value of initialTime
+            // initial time set to seconds (which also depends on the value of secondOut) after first iteration
+            dx = performance.now();
+
+            if (dev) {
+                dx = performance.now();
+                console.log("count", count);
+            }
+
+            // add immediately - pt1
+            part1();
+
+            // add tidy up - pt2
+            // part2();
+
+            // subtract - pt 3
+            // part3();
+            // last part tidy up - pt 4
+            // part4();
 
         }
 
-        //init
+        //initial
         timeline();
     };
 
