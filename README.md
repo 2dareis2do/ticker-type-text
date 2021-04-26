@@ -8,7 +8,7 @@ This is a jQuery Plugin designed to mimick a typewriter or news ticker. I looked
 
 This has been tested to work with jQuery 2.1.3. or later. Not sure but should also work with earlier versions.
 
-## Dependencies
+## Dependencies
 
 https://github.com/2dareis2do/vis
 
