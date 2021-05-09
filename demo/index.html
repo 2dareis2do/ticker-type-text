@@ -6,15 +6,13 @@
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../style.css">
     <script src="./js/indexvis.js"></script>
-    <script src="../index.min.js"></script>
+    <script src="../index.js"></script>
     <script src="./js/script.js"></script>
   </head>
 <body>
 
-<button id="timerpause">Pause me</button>
-<button id="timerstop">Stop me</button>
 
-<!-- <form id="timerstart" action="">
+<form id="timerstart" action="">
   <label for="keep">Keep:</label><br>
   <input type="text" id="keep" name="keep" value="17"><br>
   <label for="seconds">Seconds:</label><br>
@@ -25,16 +23,25 @@
   <input type="text" id="iterations" name="iterations" value="1"><br>
   <label for="secondsout">secondsout:</label><br>
   <input type="text" id="secondsout" name="secondsout" value="3"><br>
-  <input type="button" value="Update" name="update"/>
-</form> -->
+  <label for="ratio">ratio:</label><br>
+  <input type="text" id="ratio" name="ratio" value="0.8"><br>
+  <label for="dev">dev:</label><br>
+  <input type="text" id="dev" name="dev" value="false"><br>
+  <input type="button" value="Start" name="start"/>
+</form>
+
+  <h1 class="ttt"></h1>
 
 <div id="holder" class="text tt-holder">
-  <p class="tt">Your partner for change</p>
-  <p class="tt">Your partner for impact</p>
-  <p class="tt">Your partner for life </p>
-  <p class="tt">Your partner for success </p>
-  <h1 class="ttt"></h1>
+  <p class="tt">Your partner for <b>change</b></p>
+  <p class="tt">Your partner <i>for</i>  impact</p>
+  <p class="tt">Your partner for <a href="#target" target="_blank">life</a></p>
+  <p class="tt">Your partner <span class="red">for</span> success </p>
 </div>
 
+
+
+<button id="timerpause">Pause me</button>
+<button id="timerstop">Stop me</button>
 </body>
 </html>

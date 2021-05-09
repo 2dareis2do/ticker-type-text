@@ -6,7 +6,12 @@
 }
 
 .tt {
-  display: none;
+  /* display: none; */
+  opacity: 50%;
+}
+
+.red {
+  color: red;
 }
 
 .ttt {

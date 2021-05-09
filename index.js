@@ -184,6 +184,13 @@
         }
 
         function part1() {
+
+            // add clear on first run
+            if (count < 1) {
+                elem.text("");
+            }
+
+
             masterTimelineTimerAdd = setTimeout(function () {
                 if (!exit) {
                     timeoutAdd();
@@ -292,8 +299,7 @@
 
         function timeline() {
 
-            // initially set to 0 then repeats depending on value of initialTime
-            // initial time set to seconds (which also depends on the value of secondOut) after first iteration
+            // runs immediately
             dx = performance.now();
 
             if (dev) {
@@ -302,7 +308,9 @@
             }
 
             // add immediately - pt1
+            // initial time set to seconds (which also depends on the value of secondOut) after first iteration
             part1();
+
 
         }
         //initial
