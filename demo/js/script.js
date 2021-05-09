@@ -15,10 +15,10 @@ $(document).ready(function () {
     let seconds = $('#timerstart').find('input[name="seconds"]').val();
     let delay = $('#timerstart').find('input[name="delay"]').val();
     let iterations = parseInt($('#timerstart').find('input[name="iterations"]').val());
-    let secondsout = $('#timerstart').find('input[name="secondsout"]').val();
-    let ratio = $('#timerstart').find('input[name="ratio"]').val();
-    let dev = $('#timerstart').find('input[name="dev"]').val() === "true" ? true : false;
-
+    let secondsout = parseInt($('#timerstart').find('input[name="secondsout"]').val());
+    let ratio = $('#timerstart').find('input[name="ratio"]').val()/100;
+    let dev = $('#timerstart').find('input[name="dev"]').is(':checked');
+    console.log("dev", dev);
     animatetext = function () {
       $(".ttt").tickerText($elements, keep, seconds, delay, iterations, ratio, secondsout, dev, "timerpause", "timerstop");
     };

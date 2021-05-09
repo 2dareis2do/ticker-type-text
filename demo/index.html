@@ -13,20 +13,22 @@
 
 
 <form id="timerstart" action="">
-  <label for="keep">Keep:</label><br>
+  <label for="keep">Keep:</label></br>
   <input type="text" id="keep" name="keep" value="17"><br>
-  <label for="seconds">Seconds:</label><br>
+  <label for="seconds">Time (Seconds):</label><br>
   <input type="text" id="seconds" name="seconds" value="3"><br>
-  <label for="delay">delay:</label><br>
+  <label for="delay">Delay (ms):</label><br>
   <input type="text" id="delay" name="delay" value="30"><br>
-  <label for="iterations">iterations:</label><br>
+  <label for="iterations">Iterations:</label><br>
   <input type="text" id="iterations" name="iterations" value="1"><br>
-  <label for="secondsout">secondsout:</label><br>
+  <label for="secondsout">Time phase 2 (Seconds):</label><br>
   <input type="text" id="secondsout" name="secondsout" value="3"><br>
   <label for="ratio">ratio:</label><br>
-  <input type="text" id="ratio" name="ratio" value="0.8"><br>
-  <label for="dev">dev:</label><br>
-  <input type="text" id="dev" name="dev" value="false"><br>
+  <input type="range" id="ratio" name="ratio" min="1" max="100" value="80"><br>
+  <!-- <input type="text" id="ratio" name="ratio" value="0.8"><br> -->
+  <label for="dev">dev:</label></br>
+  <input type="checkbox" name="dev" id="dev"></br>
+  <!-- <input type="text" id="dev" name="dev" value="false"><br> -->
   <input type="button" value="Start" name="start"/>
 </form>
 
