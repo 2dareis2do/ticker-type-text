@@ -14,7 +14,7 @@ $(document).ready(function () {
     let keep = $('#timerstart').find('input[name="keep"]').val();
     let seconds = $('#timerstart').find('input[name="seconds"]').val();
     let delay = $('#timerstart').find('input[name="delay"]').val();
-    let iterations = $('#timerstart').find('input[name="iterations"]').val();
+    let iterations = parseInt($('#timerstart').find('input[name="iterations"]').val());
     let secondsout = $('#timerstart').find('input[name="secondsout"]').val();
     let ratio = $('#timerstart').find('input[name="ratio"]').val();
     let dev = $('#timerstart').find('input[name="dev"]').val() === "true" ? true : false;
