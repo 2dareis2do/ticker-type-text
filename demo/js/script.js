@@ -11,7 +11,7 @@ $(document).ready(function () {
   // massage variables
   $("#timerstart input[name='start']").on("click", function (e) {
     e.preventDefault();
-    let keep = $('#timerstart').find('input[name="keep"]').val();
+    let keep = parseInt($('#timerstart').find('input[name="keep"]').val());
     let seconds = $('#timerstart').find('input[name="seconds"]').val();
     let delay = $('#timerstart').find('input[name="delay"]').val();
     let iterations = parseInt($('#timerstart').find('input[name="iterations"]').val());
