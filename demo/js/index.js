@@ -101,6 +101,15 @@
         let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
         let textArray = contents[count % contents.length].textContent.split("");
 
+        // get length
+        let textArrayNewLength = scontent.content[[count % scontent.content.length]].length;
+        // console.log("textArrayNewLength length", textArrayNewLength);
+
+        let textArrayNew = scontent.content[[count % scontent.content.length]];
+        // console.log("textArrayNew ", textArrayNew);
+        // console.log("scontent ", scontent);
+
+
         // needs to be able to start everythng again immediately
         function reset() {
             clearTimeout(masterTimelineTimerAdd);
@@ -117,14 +126,63 @@
             timelineTimerAdd = setTimeout(function () {
 
                 let text = elem.text();
+
                 if (!keep && current < textArray.length ) {
                     elem.text(text + textArray[current]);
                     current++;
                 }
-
                 if (keep && current < textArray.length && count >= 0) {
                     if (textArray[current] !== undefined) {
-                        elem.text(text + textArray[current]);
+                        elem.append(textArray[current]);
+                    }
+
+                    // console.log("current",current);
+                    // console.log("count", count);
+
+                    // console.log("scontent.content.length", scontent.content.length);
+
+                    // console.log("count modulus scontent.content", (count % scontent.content.length));
+                    // console.log("escaped character", textArrayNew[count % scontent.content.length][current] + textArrayNew[count % scontent.content.length][current + 1]);
+                    // console.log(textArrayNew[count % scontent.content.length]);
+                    // console.log(textArrayNew[count % scontent.content.length][current]);
+                    // console.log(scontent.content[count % scontent.content.length][current]);
+
+
+
+                    if ((count % scontent.content.length) <= textArrayNew[0].length &&  textArrayNew[0][current] === "/" ) {
+                        // console.log("escaped character concat", textArrayNew[0][current] + textArrayNew[0][current + 1]);
+                        // console.log("escaped character 2", textArrayNew[0][current + 1]);
+                        // let text;
+                        if (textArrayNew[0][current + 1] === "1") {
+
+                            // console.log( textArrayNew);
+                            // text = $(textArrayNew[1]).text();
+                            // console.log("escaped character add wrapper 1", $(textArrayNew[1]).text(""));
+                            // console.log("elem", elem);
+                            // let $temp = $(textArrayNew[1]).text("");
+                            // console.log("$temp", $temp);
+                            // console.log("$temp 0", $temp[0]);
+                            // elem.text(text + textArray[current]);
+                            elem.append($(textArrayNew[1]).text(""));
+                            // $(elem).append($temp);
+                            // console.log(elem);
+                        }
+
+                        if (textArrayNew[0][current + 1] === "2") {
+                            // text = $(textArrayNew[2]).text()
+                            // console.log("escaped character add wrapper 2", $(textArrayNew[2]).text(""));
+
+                            elem.append($(textArrayNew[1]).text(""));
+                            // console.log(elem);
+
+                            // console.log(text);
+
+                        }
+                        //put empty
+                        // elem.append("<b>Appended text</b>");
+
+                        // console.log(textArrayNew[count % scontent.content.length][current]);
+
                     }
                     current++;
                 }
@@ -138,10 +196,18 @@
                         da = performance.now();
                         console.log("completed pt1 ", da - dx, "microseconds", "text", elem.text());
                     }
+
+                    // elem.append(" <i>test</i>");
+                    // console.log("elem 1", elem);
+                    // console.log("elem.text()", elem.text());
+                    // elem.append(" te");
+
+                    // elem.text(elem.text() + " re");
+                    // console.log("elem 2", elem);
+
                     clearInterval(timelineTimerAdd);
                     part2();
                     return;
-
                 }
 
                 if (!exit) {
@@ -235,13 +301,16 @@
                 elem.text("");
             }
 
-
             masterTimelineTimerAdd = setTimeout(function () {
                 if (!exit) {
+                    // console.log(count);
+
                     timeoutAdd();
                 } else {
                     clearTimeout(masterTimelineTimerAdd);
                    // part2();
+
+                    // elem.text(text + "rest string");
                     return;
                 };
 
@@ -317,9 +386,13 @@
                 if (!exit && (!pause || vis())) {
                     // lets make sure we increase the count to make sure we select the right text
                     count++;
-
                     // update text array after count increment
                     textArray = contents[count % contents.length].textContent.split("");
+                    // console.log("scontent.content modulus", scontent.content[[count % scontent.content.length ]] );
+                    // console.log("scontent.content", scontent.content);
+
+                    textArrayNew = scontent.content[[count % scontent.content.length]];
+                    // console.log("textArrayNew ", textArrayNew);
 
                     // denotes new iteration
                     if (dev) {

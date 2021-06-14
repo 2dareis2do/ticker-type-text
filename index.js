@@ -37,6 +37,29 @@
         masterTimelineTimerSubtract,
         masterTimelineTimerSubtractTidy;
 
+        // console.log("contents", contents);
+        contents.each(function (any) {
+            let temp = contents[any];
+            // console.log(temp, typeof temp);
+            // console.log("tremp", temp);
+            // console.log(temp.innerHTML,  typeof temp.innerHTML);
+            // console.log(temp.innerHTML.length);
+            let re = /<(\S*?)[^>]*>.*?<\/\1>|<.*?\/>/;
+            let re2 = /(\>).+?(?=\<)/g;
+            let myArray = temp.innerHTML.match(re);
+            console.log("myArray",myArray);
+            let str = myArray[0].match(re2);
+            // console.log(str);
+
+            str = str[0].slice(1);  // .substring(1);
+            console.log("str",str);
+            let myArraySplit = temp.innerHTML.split((re));
+            console.log("myArraySplit", myArraySplit);
+
+            // console.log(temp.innerHTML, typeof temp.innerHTML);
+
+        })
+
         if (pausetarget) {
             $("#" + pausetarget).on("click", function (e) {
                 e.preventDefault();

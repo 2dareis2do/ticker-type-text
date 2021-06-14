@@ -1,4 +1,4 @@
-
+@charset "utf-8";
 /* some custom styles related to ticket text */
 
 #holder {
@@ -6,7 +6,6 @@
 }
 
 .tt {
-  /* display: none; */
   opacity: 50%;
 }
 
