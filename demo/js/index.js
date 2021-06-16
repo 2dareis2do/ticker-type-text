@@ -287,7 +287,7 @@
 
                 if (current > 0 ) {
                     // elem.text(tempText);
-                    console.log("current", current, );
+                        // console.log("current", current );
                     // console.log("last but one", textArrayNew[0][current - childCharCounted + childCounted - 2 ]);
                     // console.log("last char", textArrayNew[0][current - childCharCounted + childCounted - 1]);
                     // console.log("elm", elem);
@@ -297,11 +297,11 @@
                         textArrayNew[0],
                         textArray[current],
                         // textArray[current - childCounted], current - childCharCounted + childCounted - 2,
-                        textArrayNew[0][current - childCharCounted + childCounted - 1],
+                        // textArrayNew[0][current - childCharCounted + childCounted - 1],
                         textArrayNew[0][current - childCharCounted + (2 *childCounted) - 2],
 
-                        textArrayNew[0][current - childCharCounted + childCounted - 2],
-                        textArrayNew[0][current - childCharCounted + childCounted - 3],
+                        // textArrayNew[0][current - childCharCounted + childCounted - 2],
+                        // textArrayNew[0][current - childCharCounted + childCounted - 3],
                         // textArrayNew[0][current - childCharCounted + childCounted - 4],
                         elem.html()
                     );
@@ -311,17 +311,13 @@
                         console.log("subtract beginning textArrayNew[0], textArray[current], extArrayNew[0][current - childCharCounted + childCounted - 2",
                         textArrayNew[0],
                         textArray[current],
-                            // textArray[current - childCounted], current - childCharCounted + childCounted - 2,
-                            textArrayNew[0][current - childCharCounted + childCounted - 1],
+                            // textArrayNew[0][current - childCharCounted + childCounted - 1],
                             textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2],
 
-                            textArrayNew[0][current - childCharCounted + childCounted - 2],
-                            textArrayNew[0][current - childCharCounted + childCounted - 3],
-                            // textArrayNew[0][current - childCharCounted + childCounted - 4],
+                            // textArrayNew[0][current - childCharCounted + childCounted - 2],
+                            // textArrayNew[0][current - childCharCounted + childCounted - 3],
                               elem.html()
                              );
-                        // console.log("elem.children ", elem.children());
-                        // console.log("elem.children length ", elem.children().length);
 
                         // 1
                         if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] === "1") {
