@@ -148,19 +148,25 @@
                     console.log("textArray[current], textArrayNew[0][current - childCharCounted - childCounted - 1]", textArray[current],
                     textArrayNew[0],
                     textArrayNew[0][current - childCharCounted + childCounted],
+                        textArrayNew[0][current - childCharCounted + (2* childCounted)],
+
                     // textArrayNew[0][current - childCharCounted + (childCounted * 2)],
                     current - childCharCounted + childCounted ,
                     elem.html()
                     )
                     // need to figure out how to handle n in /1 /2
                     // in a way the number has no significance ans we can determine
-                    if (textArray[current] !== undefined && (textArrayNew[0][current - childCharCounted + childCounted] !== "/") && currentChild === 0) {
+
+                    console.log("textArrayNew[0][current - childCharCounted + childCounted]", textArrayNew[0][current - childCharCounted + childCounted]);
+                    console.log("textArrayNew[0][current - childCharCounted + childCounted]", textArrayNew[0][current - childCharCounted + (2* childCounted)]);
+
+                    if (textArray[current] !== undefined && (textArrayNew[0][current - childCharCounted + (2* childCounted)] !== "/") && currentChild === 0) {
                         elem.append(textArray[current]);
                         console.log("ele.html()", elem.html());
 
                     }
 
-                    if (textArrayNew[0][current - childCharCounted + childCounted ] === "/" )  {
+                    if (textArrayNew[0][current - childCharCounted + (2 * childCounted) ] === "/" )  {
                         // 1
                         if (textArrayNew[0][current + 1 - childCharCounted] === "1") {
 
@@ -177,19 +183,18 @@
                             console.log("ele.html()", elem.html());
 
                             childLength = childLength - 1;
-                            if (childLength > 0) {
-                                childCharCounted = childCharCounted + 1;
-                                console.log("childCharCounted", childCharCounted);
-                            }
+
+                            childCharCounted = childCharCounted + 1;
+                            console.log("childCharCounted", childCharCounted);
+
                             if (childLength === 0) {
                                 currentChild = 0;
                                 childCounted = childCounted + 1;
-
                             }
 
                         }
                         // 2
-                        if (textArrayNew[0][current + 1 - childCharCounted + childCounted] === "2" ) {
+                        if (textArrayNew[0][current + 1 - childCharCounted + (2 * childCounted)] === "2" ) {
                             // console.log("textArrayNew[0][current + 1 - childCharCounted]", textArrayNew[0][current + 1 - childCharCounted])
                             if (currentChild === 0) {
                                 currentChild = 2;
@@ -203,12 +208,15 @@
                             console.log("ele.html()", elem.html());
 
                             childLength = childLength - 1;
-                            if (childLength > 0) {
-                                // console.log("pt 2 choldLength", childLength);
-                                childCharCounted = childCharCounted + 1;
-                                console.log("childCharCounted", childCharCounted);
 
-                            }
+                            childCharCounted = childCharCounted + 1;
+                            console.log("childCharCounted", childCharCounted);
+                            // if (childLength > 0) {
+                            //     // console.log("pt 2 choldLength", childLength);
+                            //     // childCharCounted = childCharCounted + 1;
+                            //     // console.log("childCharCounted", childCharCounted);
+
+                            // }
                             if (childLength === 0) {
                                 currentChild = 0;
                                 childCounted = childCounted + 1;
@@ -285,15 +293,27 @@
                     // console.log("elm", elem);
                     // iterate through textArrayNew in reverse order using current as index
 
+                    console.log("subtract before beginning textArrayNew[0], textArray[current], extArrayNew[0][current - childCharCounted + childCounted - 2",
+                        textArrayNew[0],
+                        textArray[current],
+                        // textArray[current - childCounted], current - childCharCounted + childCounted - 2,
+                        textArrayNew[0][current - childCharCounted + childCounted - 1],
+                        textArrayNew[0][current - childCharCounted + (2 *childCounted) - 2],
 
+                        textArrayNew[0][current - childCharCounted + childCounted - 2],
+                        textArrayNew[0][current - childCharCounted + childCounted - 3],
+                        // textArrayNew[0][current - childCharCounted + childCounted - 4],
+                        elem.html()
+                    );
                     //child
-                    if (textArrayNew[0][current - childCharCounted + childCounted - 2] === "/") {
+                    if (textArrayNew[0][current - childCharCounted + (2* childCounted) - 2] === "/") {
 
                         console.log("subtract beginning textArrayNew[0], textArray[current], extArrayNew[0][current - childCharCounted + childCounted - 2",
                         textArrayNew[0],
                         textArray[current],
                             // textArray[current - childCounted], current - childCharCounted + childCounted - 2,
                             textArrayNew[0][current - childCharCounted + childCounted - 1],
+                            textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2],
 
                             textArrayNew[0][current - childCharCounted + childCounted - 2],
                             textArrayNew[0][current - childCharCounted + childCounted - 3],
@@ -304,20 +324,19 @@
                         // console.log("elem.children length ", elem.children().length);
 
                         // 1
-                        if (textArrayNew[0][current - childCharCounted + childCounted - 1] === "1") {
-                            console.log("elem.children [0]", elem.children()[0]);
+                        if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] === "1") {
+                            // console.log("elem.children [0]", elem.children()[0]);
                             let string = $(elem.children()[0]).text();
                             let shorterString = string.substring(0, string.length - 1)
                             $(elem.children()[0]).text(shorterString);
-                            console.log("ele.html()", elem.html());
+                            // console.log("ele.html()", elem.html());
 
-                            console.log("childCharCounted", childCharCounted);
+                            // console.log("childCharCounted", childCharCounted);
 
-                            if (childLength > 0) {
-                                childCharCounted = childCharCounted - 1;
-                                console.log("childCharCounted", childCharCounted);
-                            }
+                            childCharCounted = childCharCounted - 1;
+                            // console.log("childCharCounted", childCharCounted);
 
+                            childLength = childLength - 1;
 
                             if (childLength === 0) {
                                 console.log("pt 2 end choldLength", childLength);
@@ -328,45 +347,29 @@
                                 childCounted = childCounted - 1;
                             }
 
-                            childLength = childLength - 1;
-                            console.log("childLength", childLength );
-
                         }
 
-                        if (textArrayNew[0][current - childCharCounted + childCounted - 1] === "2") {
+                        if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] === "2") {
 
                             if (currentChild === 0) {
                                 currentChild = 2;
                                 childLength = $(textArrayNew[2]).text().length;
                             }
 
-
                             let string = $(elem.children()[1]).text();
                             let shorterString = string.substring(0, string.length - 1)
 
                             $(elem.children()[1]).text(shorterString);
 
-                            // childCharCounted = childCharCounted - 1;
-                            if (childLength > 0) {
-                                childCharCounted = childCharCounted - 1;
-                                console.log("childCharCounted", childCharCounted);
-                            }
+                            childCharCounted = childCharCounted - 1;
 
                             childLength = childLength - 1;
 
-                            // need to figure out when to move target back to parent
-                            // and remove child element
-                            // console.log("pt 2 childCharCounted", childCharCounted);
-
-                            // console.log("pt 2 choldLength", childLength);
+                            // move target back to parent and remove child element
                             if (childLength === 0 ){
                                 console.log("pt 2 end choldLength", childLength);
 
                                 elem.children()[1].remove();
-                                // console.log("elem", elem);
-                                // console.log("elem.html", elem.html());
-                                // console.log("elem html -1", elem.html().substring(0, elem.html().length - 1))
-                                // string.substring(0, string.length - 1)
 
                                 childCounted = childCounted - 1;
                                 currentChild = 0;
@@ -377,13 +380,14 @@
                     }
 
                     // parent
-                    if (textArrayNew[0][current - childCharCounted + childCounted - 2] !== "/") {
+                    if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2] !== "/") {
                          console.log("textArrayNew[0], textArray[current], extArrayNew[0][current - childCharCounted + childCounted - 2",
                          textArrayNew[0],
                          textArray[current],
                             textArray[current - childCounted],
                             current - childCharCounted + childCounted - 2,
                             textArrayNew[0][current - childCharCounted + childCounted - 1],
+                             textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2],
 
                             textArrayNew[0][current - childCharCounted + childCounted - 2],
                             textArrayNew[0][current - childCharCounted + childCounted - 3],
