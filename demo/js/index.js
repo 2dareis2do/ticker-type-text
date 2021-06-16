@@ -37,6 +37,11 @@
         masterTimelineTimerSubtract,
         masterTimelineTimerSubtractTidy;
 
+        let currentChild = 0;
+        let childLength = 0;
+        let childCharCounted = 0;
+        let childCounted = 0;
+
 
         //test to
 
@@ -100,16 +105,13 @@
 
         let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
         let textArray = contents[count % contents.length].textContent.split("");
+        console.log("textArray", textArray);
 
         // get length
-        let textArrayNewLength = scontent.content[[count % scontent.content.length]].length;
-        // console.log("textArrayNewLength length", textArrayNewLength);
+        // let textArrayNewLength = scontent.content[[count % scontent.content.length]].length;
 
-        let textArrayNew = scontent.content[[count % scontent.content.length]];
-        // console.log("textArrayNew ", textArrayNew);
-        // console.log("scontent ", scontent);
-
-
+        let textArrayNew = scontent.content[count % scontent.content.length];
+        console.log("textArrayNew", textArrayNew);
         // needs to be able to start everythng again immediately
         function reset() {
             clearTimeout(masterTimelineTimerAdd);
@@ -125,65 +127,76 @@
         function timeoutAdd() {
             timelineTimerAdd = setTimeout(function () {
 
-                let text = elem.text();
+                // let text = elem.text();
 
                 if (!keep && current < textArray.length ) {
-                    elem.text(text + textArray[current]);
+                    // elem.text(text + textArray[current]);
+                    elem.append(textArray[current]);
                     current++;
                 }
-                if (keep && current < textArray.length && count >= 0) {
-                    if (textArray[current] !== undefined) {
+                if (keep && current < textArray.length && count >= 0 ) {
+
+                    // console.log(" - current", current);
+                    // console.log("textArray[current]", textArray[current]);
+                    // console.log("currentChild", currentChild);
+                    // console.log("current, textArray[current], currentChild, textArrayNew[0][current - childCharCounted, childCounted, (textArrayNew[0][current - childCharCounted - childCounted - 1] ", current, textArray[current], currentChild, textArrayNew[0][current - childCharCounted], childCounted, textArrayNew[0][current - childCharCounted - childCounted - 1] )
+                    // console.log("textArray[current], textArrayNew[0][current - childCharCounted - childCounted - 1]", textArray[current], textArrayNew[0], textArrayNew[0][current - childCharCounted + childCounted], textArrayNew[0][current - childCharCounted + (childCounted * 2)], current - childCharCounted + (childCounted ))
+                    // need to figure out how to handle n in /1 /2
+                    // in a way the number has no significance ans we can determine
+                    if (textArray[current] !== undefined && (textArrayNew[0][current - childCharCounted + childCounted] !== "/") && currentChild === 0) {
                         elem.append(textArray[current]);
                     }
 
-                    // console.log("current",current);
-                    // console.log("count", count);
+                    if (textArrayNew[0][current - childCharCounted + childCounted ] === "/" )  {
+                        // 1
+                        if (textArrayNew[0][current + 1 - childCharCounted] === "1") {
 
-                    // console.log("scontent.content.length", scontent.content.length);
+                            if (currentChild === 0){
+                                currentChild = 1;
+                                childLength = $(textArrayNew[1]).text().length;
+                                $(textArrayNew[1]).text("");
+                                elem.append(textArrayNew[1]);
+                            }
 
-                    // console.log("count modulus scontent.content", (count % scontent.content.length));
-                    // console.log("escaped character", textArrayNew[count % scontent.content.length][current] + textArrayNew[count % scontent.content.length][current + 1]);
-                    // console.log(textArrayNew[count % scontent.content.length]);
-                    // console.log(textArrayNew[count % scontent.content.length][current]);
-                    // console.log(scontent.content[count % scontent.content.length][current]);
+                            elem.children()[0].append(textArray[current]);
+                            childLength = childLength - 1;
+                            if (childLength > 0) {
+                                childCharCounted = childCharCounted + 1;
+                            }
+                            if (childLength === 0) {
+                                currentChild = 0;
+                                childCounted = childCounted + 1;
 
+                            }
 
-
-                    if ((count % scontent.content.length) <= textArrayNew[0].length &&  textArrayNew[0][current] === "/" ) {
-                        // console.log("escaped character concat", textArrayNew[0][current] + textArrayNew[0][current + 1]);
-                        // console.log("escaped character 2", textArrayNew[0][current + 1]);
-                        // let text;
-                        if (textArrayNew[0][current + 1] === "1") {
-
-                            // console.log( textArrayNew);
-                            // text = $(textArrayNew[1]).text();
-                            // console.log("escaped character add wrapper 1", $(textArrayNew[1]).text(""));
-                            // console.log("elem", elem);
-                            // let $temp = $(textArrayNew[1]).text("");
-                            // console.log("$temp", $temp);
-                            // console.log("$temp 0", $temp[0]);
-                            // elem.text(text + textArray[current]);
-                            elem.append($(textArrayNew[1]).text(""));
-                            // $(elem).append($temp);
-                            // console.log(elem);
                         }
+                        // 2
+                        if (textArrayNew[0][current + 1 - childCharCounted + childCounted] === "2" ) {
+                            // console.log("textArrayNew[0][current + 1 - childCharCounted]", textArrayNew[0][current + 1 - childCharCounted])
+                            if (currentChild === 0) {
+                                currentChild = 2;
+                                childLength = $(textArrayNew[2]).text().length;
+                                $(textArrayNew[2]).text("");
+                                elem.append(textArrayNew[2]);
+                            }
+                            elem.children()[1].append(textArray[current]);
+                            childLength = childLength - 1;
+                            if (childLength > 0) {
+                                // console.log("pt 2 choldLength", childLength);
+                                childCharCounted = childCharCounted + 1;
+                            }
+                            if (childLength === 0) {
+                                currentChild = 0;
+                                childCounted = childCounted + 1;
 
-                        if (textArrayNew[0][current + 1] === "2") {
-                            // text = $(textArrayNew[2]).text()
-                            // console.log("escaped character add wrapper 2", $(textArrayNew[2]).text(""));
-
-                            elem.append($(textArrayNew[1]).text(""));
-                            // console.log(elem);
-
-                            // console.log(text);
-
+                            }
                         }
                         //put empty
-                        // elem.append("<b>Appended text</b>");
-
-                        // console.log(textArrayNew[count % scontent.content.length][current]);
 
                     }
+                    // console.log(" - childCharCounted", childCharCounted);
+
+                    // console.log("current - childCharCounted", current - childCharCounted);
                     current++;
                 }
                 if (current >= textArray.length) {
@@ -196,7 +209,7 @@
                         da = performance.now();
                         console.log("completed pt1 ", da - dx, "microseconds", "text", elem.text());
                     }
-
+                    // console.log("childCharCounted", childCharCounted);
                     // elem.append(" <i>test</i>");
                     // console.log("elem 1", elem);
                     // console.log("elem.text()", elem.text());
@@ -234,7 +247,7 @@
                 }
 
                 if (current > 0 ) {
-                    elem.text(tempText);
+                    // elem.text(tempText);
                     current--;
                 }
 
@@ -323,8 +336,12 @@
                 let text = elem.text();
 
                 if (text != contents[(count) % contents.length].textContent && count >= 1 && !exit && (vis() && !pause)) {
-                    elem.text(contents[count % contents.length].textContent);
-                    current = contents[count % contents.length].textContent.length;
+                    // elem.text(contents[count % contents.length].textContent);
+                    // let temp = contents[count % contents.length].innerHTML;
+                    // console.log("temp", temp);
+                    // console.log("elem", elem);
+                    // elem.innerHTML = contents[count % contents.length].innerHTML;
+                    // current = contents[count % contents.length].textContent.length;
                 }
 
                 dat = performance.now();
@@ -370,7 +387,18 @@
                 }
                 // clean if we are using keep
                 if (keep && text != contents[count % contents.length].textContent.substr(0, keep) && !exit && (vis() && !pause)) {
-                    elem.text(contents[count % contents.length].textContent.substr(0, keep));
+                    let innerHTML = contents[count % contents.length].innerHTML;
+                    // console.log(innerHTML);
+                    // $html = $.parseHTML(innerHTML);
+                    // console.log($html.text());
+
+                    // console.log($($html).text());
+                    // $($html).text().substr(0, keep);
+                    // console.log($html);
+
+                    // current = contents[count % contents.length].textContent.length;
+                    // elem.text(contents[count % contents.length].textContent.substr(0, keep));
+                    // elem.html($html);
                 }
 
                 // set speed of next iteration if using 2nd speed parameter
