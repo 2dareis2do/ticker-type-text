@@ -105,13 +105,13 @@
 
         let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
         let textArray = contents[count % contents.length].textContent.split("");
-        console.log("textArray", textArray);
+        // console.log("textArray", textArray);
 
         // get length
         // let textArrayNewLength = scontent.content[[count % scontent.content.length]].length;
 
         let textArrayNew = scontent.content[count % scontent.content.length];
-        console.log("textArrayNew", textArrayNew);
+        // console.log("textArrayNew", textArrayNew);
         // needs to be able to start everythng again immediately
         function reset() {
             clearTimeout(masterTimelineTimerAdd);
@@ -136,11 +136,18 @@
                 }
                 if (keep && current < textArray.length && count >= 0 ) {
 
-                    // console.log(" - current", current);
+                    console.log(" - current", current);
+                    console.log("currentChild", currentChild);
+
                     // console.log("textArray[current]", textArray[current]);
                     // console.log("currentChild", currentChild);
                     // console.log("current, textArray[current], currentChild, textArrayNew[0][current - childCharCounted, childCounted, (textArrayNew[0][current - childCharCounted - childCounted - 1] ", current, textArray[current], currentChild, textArrayNew[0][current - childCharCounted], childCounted, textArrayNew[0][current - childCharCounted - childCounted - 1] )
-                    // console.log("textArray[current], textArrayNew[0][current - childCharCounted - childCounted - 1]", textArray[current], textArrayNew[0], textArrayNew[0][current - childCharCounted + childCounted], textArrayNew[0][current - childCharCounted + (childCounted * 2)], current - childCharCounted + (childCounted ))
+                    console.log("textArray[current], textArrayNew[0][current - childCharCounted - childCounted - 1]", textArray[current],
+                    textArrayNew[0],
+                    textArrayNew[0][current - childCharCounted + childCounted],
+                    // textArrayNew[0][current - childCharCounted + (childCounted * 2)],
+                    current - childCharCounted + (childCounted )
+                    )
                     // need to figure out how to handle n in /1 /2
                     // in a way the number has no significance ans we can determine
                     if (textArray[current] !== undefined && (textArrayNew[0][current - childCharCounted + childCounted] !== "/") && currentChild === 0) {
@@ -162,6 +169,7 @@
                             childLength = childLength - 1;
                             if (childLength > 0) {
                                 childCharCounted = childCharCounted + 1;
+                                console.log("childCharCounted", childCharCounted);
                             }
                             if (childLength === 0) {
                                 currentChild = 0;
@@ -184,11 +192,12 @@
                             if (childLength > 0) {
                                 // console.log("pt 2 choldLength", childLength);
                                 childCharCounted = childCharCounted + 1;
+                                console.log("childCharCounted", childCharCounted);
+
                             }
                             if (childLength === 0) {
                                 currentChild = 0;
                                 childCounted = childCounted + 1;
-
                             }
                         }
                         //put empty
@@ -248,6 +257,117 @@
 
                 if (current > 0 ) {
                     // elem.text(tempText);
+                    console.log("current", current, );
+                    // console.log("last but one", textArrayNew[0][current - childCharCounted + childCounted - 2 ]);
+                    // console.log("last char", textArrayNew[0][current - childCharCounted + childCounted - 1]);
+                    // console.log("elm", elem);
+                    // iterate through textArrayNew in reverse order using current as index
+
+
+
+                    if (textArrayNew[0][current - childCharCounted + childCounted - 2] === "/") {
+
+                        console.log("textArrayNew[0], textArray[current], extArrayNew[0][current - childCharCounted + childCounted - 2",
+                        textArrayNew[0],
+                        textArray[current - 1],
+                            // textArray[current - childCounted], current - childCharCounted + childCounted - 2,
+                            textArrayNew[0][current - childCharCounted + childCounted - 1],
+
+                            textArrayNew[0][current - childCharCounted + childCounted - 2],
+                            textArrayNew[0][current - childCharCounted + childCounted - 3],
+                            // textArrayNew[0][current - childCharCounted + childCounted - 4],
+                             elem.html());
+                        // console.log("elem.children ", elem.children());
+                        // console.log("elem.children length ", elem.children().length);
+
+                        // 1
+                        if (textArrayNew[0][current - childCharCounted + childCounted - 1] === "1") {
+                            console.log("elem.children [0]", elem.children()[0]);
+                            let string = $(elem.children()[0]).text();
+                            let shorterString = string.substring(0, string.length - 1)
+                            $(elem.children()[0]).text(shorterString);
+                            console.log("childCharCounted", childCharCounted);
+
+                            if (childLength > 0) {
+                                childCharCounted = childCharCounted - 1;
+                                console.log("childCharCounted", childCharCounted);
+                            }
+
+
+                            if (childLength === 0) {
+                                console.log("pt 2 end choldLength", childLength);
+
+                                elem.children()[1].remove();
+                                childCounted = childCounted - 1;
+                            }
+
+                            childLength = childLength - 1;
+                            console.log("childLength", childLength );
+
+                        }
+
+                        if (textArrayNew[0][current - childCharCounted + childCounted - 1] === "2") {
+
+                            if (currentChild === 0) {
+                                currentChild = 2;
+                                childLength = $(textArrayNew[2]).text().length;
+                            }
+
+
+                            let string = $(elem.children()[1]).text();
+                            let shorterString = string.substring(0, string.length - 1)
+
+                            $(elem.children()[1]).text(shorterString);
+
+                            // childCharCounted = childCharCounted - 1;
+                            if (childLength > 0) {
+                                childCharCounted = childCharCounted - 1;
+                                console.log("childCharCounted", childCharCounted);
+                            }
+
+                            childLength = childLength - 1;
+
+                            // need to figure out when to move target back to parent
+                            // and remove child element
+                            // console.log("pt 2 childCharCounted", childCharCounted);
+
+                            // console.log("pt 2 choldLength", childLength);
+                            if (childLength === 0 ){
+                                console.log("pt 2 end choldLength", childLength);
+
+                                elem.children()[1].remove();
+                                // console.log("elem", elem);
+                                // console.log("elem.html", elem.html());
+                                // console.log("elem html -1", elem.html().substring(0, elem.html().length - 1))
+                                // string.substring(0, string.length - 1)
+
+                                childCounted = childCounted - 1;
+                                currentChild = 0;
+
+                            }
+
+                        }
+                    }
+
+                    if (textArrayNew[0][current - childCharCounted + childCounted - 2] !== "/") {
+                         console.log("textArrayNew[0], textArray[current], extArrayNew[0][current - childCharCounted + childCounted - 2",
+                         textArrayNew[0],
+                         textArray[current],
+                            textArray[current - childCounted],
+                            current - childCharCounted + childCounted - 2,
+                            textArrayNew[0][current - childCharCounted + childCounted - 1],
+
+                            textArrayNew[0][current - childCharCounted + childCounted - 2],
+                            textArrayNew[0][current - childCharCounted + childCounted - 3],
+                            textArrayNew[0][current - childCharCounted + childCounted - 4],
+                             elem.html()
+                             );
+
+                        // console.log("elem", elem);
+                        // console.log("elem.html", elem.html());
+                        // console.log("elem html -1", elem.html().substring(0, elem.html().length - 1))
+                    }
+
                     current--;
                 }
 
@@ -386,8 +506,17 @@
                     elem.text("");
                 }
                 // clean if we are using keep
+                console.log("elem pt4 1", elem.html());
+                console.log("currentChild", currentChild);
+                console.log("childLength", childLength);
+                console.log("childCharCounted", childCharCounted);
+                console.log("childCounted", childCounted);
+
+                // childCharCounted = 0;
+                console.log("childCharCounted", childCharCounted);
+                // childCounted = 0;
                 if (keep && text != contents[count % contents.length].textContent.substr(0, keep) && !exit && (vis() && !pause)) {
-                    let innerHTML = contents[count % contents.length].innerHTML;
+                    // let innerHTML = contents[count % contents.length].innerHTML;
                     // console.log(innerHTML);
                     // $html = $.parseHTML(innerHTML);
                     // console.log($html.text());
@@ -395,7 +524,7 @@
                     // console.log($($html).text());
                     // $($html).text().substr(0, keep);
                     // console.log($html);
-
+                    // console.log("elem pt4", elem.html());
                     // current = contents[count % contents.length].textContent.length;
                     // elem.text(contents[count % contents.length].textContent.substr(0, keep));
                     // elem.html($html);
@@ -416,12 +545,7 @@
                     count++;
                     // update text array after count increment
                     textArray = contents[count % contents.length].textContent.split("");
-                    // console.log("scontent.content modulus", scontent.content[[count % scontent.content.length ]] );
-                    // console.log("scontent.content", scontent.content);
-
                     textArrayNew = scontent.content[[count % scontent.content.length]];
-                    // console.log("textArrayNew ", textArrayNew);
-
                     // denotes new iteration
                     if (dev) {
                         dy = performance.now();
