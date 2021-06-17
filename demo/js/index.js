@@ -294,9 +294,9 @@
                                 // console.log("pt 2 end choldLength", childLength);
 
                                 elem.children()[1].remove();
-                                currentChild = 0;
 
                                 childCounted = childCounted - 1;
+                                currentChild = 0;
 
                             }
 
@@ -321,11 +321,14 @@
 
                         let shortenedString = elem.html().substring(0, elem.html().length - 1)
                         console.log("shortenedString", shortenedString);
+                        console.log("elem.text length", elem.text().length);
                         // console.log("elem", elem);
                         // console.log("elem.html", elem.html());
                         // console.log("elem html -1", elem.html().substring(0, elem.html().length - 1));
                         // elem.html().substring(0, elem.html().length - 1)
-                        elem.html(shortenedString);
+                        if (elem.text().length > keep ) {
+                            elem.html(shortenedString);
+                        }
                     }
 
                     current--;
