@@ -111,7 +111,6 @@
         // let textArrayNewLength = scontent.content[[count % scontent.content.length]].length;
 
         let textArrayNew = scontent.content[count % scontent.content.length];
-        // console.log("textArrayNew", textArrayNew);
         // needs to be able to start everythng again immediately
         function reset() {
             clearTimeout(masterTimelineTimerAdd);
@@ -127,68 +126,33 @@
         function timeoutAdd() {
             timelineTimerAdd = setTimeout(function () {
 
-                // let text = elem.text();
-                // console.log(" - current", current);
-
-
                 if (!keep && current < textArray.length ) {
                     // elem.append(textArray[current]);
                     // current++;
                 }
                 if (current < textArray.length && count >= 0 ) {
-
                     // handle n in /1 /2
-                    // in a way the number has no significance ans we can determine
-
-                                console.log("textArrayNew[0][current - childCharCounted + childCounted]",
+                    // in a way the number has no significance as we can determine
+                    console.log("current character , current html",
                     textArrayNew[0][current - childCharCounted + (2* childCounted)],
                     elem.html());
 
                     if (textArray[current] !== undefined && (textArrayNew[0][current - childCharCounted + (2* childCounted)] !== "/") && currentChild === 0) {
                         elem.append(textArray[current]);
-                        // console.log("ele.html()", elem.html());
-
                     }
 
                     if (textArrayNew[0][current - childCharCounted + (2 * childCounted) ] === "/" )  {
-                        // 1
-                        if (textArrayNew[0][current + 1 - childCharCounted] === "1") {
+                        // /1
+                        if (textArrayNew[0][current + 1 - childCharCounted + (2 * childCounted)] == (childCounted + 1)) {
 
                             if (currentChild === 0){
-                                currentChild = 1;
-                                childLength = $(textArrayNew[1]).text().length;
-                                $(textArrayNew[1]).text("");
-                                elem.append(textArrayNew[1]);
-                                    // console.log("ele.html()", elem.html());
-
+                                currentChild = childCounted + 1;
+                                childLength = $(textArrayNew[childCounted + 1]).text().length;
+                                $(textArrayNew[childCounted + 1]).text("");
+                                elem.append(textArrayNew[childCounted + 1]);
                             }
-
-                            elem.children()[0].append(textArray[current]);
-                            // console.log("ele.html()", elem.html());
-
-                            childLength = childLength - 1;
-
-                            childCharCounted = childCharCounted + 1;
-                            // console.log("childCharCounted", childCharCounted);
-
-                            if (childLength === 0) {
-                                currentChild = 0;
-                                childCounted = childCounted + 1;
-                            }
-
-                        }
-                        // 2
-                        if (textArrayNew[0][current + 1 - childCharCounted + (2 * childCounted)] === "2" ) {
-                            console.log("textArrayNew[0][current + 1 - childCharCounted], currentChild, textArrayNew[2]", textArrayNew[0][current + 1 - childCharCounted], currentChild, textArrayNew[2])
-                            if (currentChild === 0) {
-                                currentChild = 2;
-                                childLength = $(textArrayNew[2]).text().length;
-                                $(textArrayNew[2]).text("");
-
-                                elem.append(textArrayNew[2]);
-
-                            }
-                            elem.children()[1].append(textArray[current]);
+                           // console.log(typeof(childCounted));
+                            elem.children()[childCounted].append(textArray[current]);
 
                             childLength = childLength - 1;
 
@@ -196,9 +160,39 @@
 
                             if (childLength === 0) {
                                 currentChild = 0;
+                                // console.log("childCounted", childCounted);
                                 childCounted = childCounted + 1;
+                                // console.log("childCountedb", childCounted);
+
                             }
+
                         }
+                        // /2
+                        // if (textArrayNew[0][current + 1 - childCharCounted + (2 * childCounted)] === "2" ) {
+                        //     console.log("textArrayNew[0][current + 1 - childCharCounted], currentChild, textArrayNew[2]", textArrayNew[0][current + 1 - childCharCounted], currentChild, textArrayNew[2])
+                        //     if (currentChild === 0) {
+                        //         currentChild = 2;
+                        //         childLength = $(textArrayNew[2]).text().length;
+                        //         $(textArrayNew[2]).text("");
+
+                        //         elem.append(textArrayNew[2]);
+
+                        //     }
+                        //     elem.children()[childCounted].append(textArray[current]);
+
+                        //     childLength = childLength - 1;
+
+                        //     childCharCounted = childCharCounted + 1;
+
+                        //     if (childLength === 0) {
+                        //         currentChild = 0;
+                        //         console.log("childCounted2", childCounted);
+
+                        //         childCounted = childCounted + 1;
+                        //         console.log("childCountedb2", childCounted);
+
+                        //     }
+                        // }
                         //put empty
 
                     }
@@ -237,7 +231,7 @@
             timelineTimerSubract = setTimeout(function () {
 
                 //do stuff
-                let tempText;
+                // let tempText;
                 // if (elem.text().length > keep) {
                 //     tempText = elem.text().substring(0, elem.text().length - 1);
                 // }
@@ -251,39 +245,46 @@
                     if (textArrayNew[0][current - childCharCounted + (2* childCounted) - 2] === "/") {
 
                         // 1
-                        if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] === "1") {
+                        // if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] == "1") {
+                        //     console.log("childCounted 1, currentChild", childCounted, currentChild );
+                            
+                        //     if (currentChild === 0) {
+                        //         currentChild = 1;
+                        //         childLength = $(textArrayNew[1]).text().length;
+                        //         console.log("currentChild sub", currentChild);
+                        //     }
+
+                        //     let string = $(elem.children()[childCounted - 1]).text();
+                        //     let shorterString = string.substring(0, string.length - 1);
+                        //     $(elem.children()[childCounted - 1]).text(shorterString);
+
+                        //     childCharCounted = childCharCounted - 1;
+
+                        //     childLength = childLength - 1;
+
+                        //     if (childLength === 0) {
+                        //         console.log("child length = 0");
+                        //         elem.children()[childCounted - 1].remove();
+
+                        //         childCounted = childCounted - 1;
+                        //         currentChild = 0;
+
+                        //     }
+
+                        // }
+
+                        if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] == childCounted) {
+                            // console.log("childCounted sub 2", childCounted);
+                            console.log("childCounted sub 2, currentChild", childCounted, currentChild);
+
                             if (currentChild === 0) {
-                                currentChild = 1;
-                                childLength = $(textArrayNew[1]).text().length;
+                                currentChild = childCounted;
+                                childLength = $(textArrayNew[childCounted]).text().length;
                             }
 
-                            let string = $(elem.children()[0]).text();
+                            let string = $(elem.children()[childCounted - 1]).text();
                             let shorterString = string.substring(0, string.length - 1);
-                            $(elem.children()[0]).text(shorterString);
-
-                            childCharCounted = childCharCounted - 1;
-
-                            childLength = childLength - 1;
-
-                            if (childLength === 0) {
-                                elem.children()[0].remove();
-                                currentChild = 0;
-
-                                childCounted = childCounted - 1;
-                            }
-
-                        }
-
-                        if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] === "2") {
-
-                            if (currentChild === 0) {
-                                currentChild = 2;
-                                childLength = $(textArrayNew[2]).text().length;
-                            }
-
-                            let string = $(elem.children()[1]).text();
-                            let shorterString = string.substring(0, string.length - 1);
-                            $(elem.children()[1]).text(shorterString);
+                            $(elem.children()[childCounted - 1]).text(shorterString);
 
                             childCharCounted = childCharCounted - 1;
 
@@ -291,13 +292,9 @@
 
                             // move target back to parent and remove child element
                             if (childLength === 0 ){
-                                // console.log("pt 2 end choldLength", childLength);
-
-                                elem.children()[1].remove();
-
+                                elem.children()[childCounted - 1].remove();
                                 childCounted = childCounted - 1;
                                 currentChild = 0;
-
                             }
 
                         }
@@ -309,23 +306,13 @@
                          textArrayNew[0],
                          textArray[current],
                             textArray[current - childCounted],
-                            // current - childCharCounted + childCounted - 2,
-                            // textArrayNew[0][current - childCharCounted + childCounted - 1],
                              textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2],
-
-                            // textArrayNew[0][current - childCharCounted + childCounted - 2],
-                            // textArrayNew[0][current - childCharCounted + childCounted - 3],
-                            // textArrayNew[0][current - childCharCounted + childCounted - 4],
                              elem.html()
-                             );
+                            );
 
                         let shortenedString = elem.html().substring(0, elem.html().length - 1)
                         console.log("shortenedString", shortenedString);
                         console.log("elem.text length", elem.text().length);
-                        // console.log("elem", elem);
-                        // console.log("elem.html", elem.html());
-                        // console.log("elem html -1", elem.html().substring(0, elem.html().length - 1));
-                        // elem.html().substring(0, elem.html().length - 1)
                         if (elem.text().length > keep ) {
                             elem.html(shortenedString);
                         }
