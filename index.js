@@ -76,7 +76,7 @@
 
         let scontent = serialise(cc);
 
-        console.log("serialised object: \n", scontent);
+        // console.log("serialised object: \n", scontent);
 
         if (pausetarget) {
             $("#" + pausetarget).on("click", function (e) {
@@ -126,7 +126,7 @@
                     if ((textArrayNew[0][current - childCharCounted + (2 * childCounted)] !== "/") && currentChild === 0) {
                         elem.append(textArray[current]);
 
-                        console.log("parent textArray[current] , current html appended", textArray[current], elem.html());
+                        // console.log("parent textArray[current] , current html appended", textArray[current], elem.html());
                     }
 
                     if (textArrayNew[0][current - childCharCounted + (2 * childCounted)] === "/") {
@@ -138,23 +138,23 @@
                                 currentChild = childCount;
                                 childLength = $(textArrayNew[childCount]).text().length;
                                 // on second iteration this is an empty string!
-                                console.log("childLength initial add", childLength, childCount, JSON.stringify(textArrayNew[childCount]), $(textArrayNew[childCount]).text());
+                                // console.log("childLength initial add", childLength, childCount, JSON.stringify(textArrayNew[childCount]), $(textArrayNew[childCount]).text());
 
                                 $(textArrayNew[childCount]).text("");
                                 elem.append(textArrayNew[childCount]);
-                                console.log("child cc0, current html tag appended 0", $(textArrayNew[childCount]).text(), elem.html());
+                                // console.log("child cc0, current html tag appended 0", $(textArrayNew[childCount]).text(), elem.html());
                             }
                             // console.log(typeof(childCounted));
                             elem.children()[childCounted].append(textArray[current]);
-                            console.log("child current html tag , appended !0", textArray[current], elem.html());
+                            // console.log("child current html tag , appended !0", textArray[current], elem.html());
                             childLength = childLength - 1;
-                            console.log("childLength after", childLength)
+                            // console.log("childLength after", childLength)
                             childCharCounted = childCharCounted + 1;
 
                             // set target child to parent if childCounted = 0
                             if (childLength === 0) {
                                 childCounted = childCount;
-                                console.log("childCounted add - exit", childCounted, $(textArrayNew[childCount]).text());
+                                // console.log("childCounted add - exit", childCounted, $(textArrayNew[childCount]).text());
 
                                 currentChild = 0;
 

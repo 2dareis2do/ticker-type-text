@@ -18,7 +18,7 @@ $(document).ready(function () {
         let secondsout = parseInt($('#timerstart').find('input[name="secondsout"]').val());
         let ratio = $('#timerstart').find('input[name="ratio"]').val()/100;
         let dev = $('#timerstart').find('input[name="dev"]').is(':checked');
-        console.log("dev", dev);
+        // console.log("dev", dev);
         animatetext = function () {
         $(".ttt").tickerText($elements, keep, seconds, delay, iterations, ratio, secondsout, dev, "timerpause", "timerstop");
         };

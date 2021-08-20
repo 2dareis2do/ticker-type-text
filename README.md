@@ -28,11 +28,10 @@ e.g.
 
 ```
 <div id="holder" class="text tt-holder">
-  <p class="tt">Your partner for change </p>
-  <p class="tt">Your partner for impact </p>
-  <p class="tt">Your partner for life </p>
-  <p class="tt">Your partner for success </p>
-  <h1 class="ttt"></h1>
+  <p class="tt">Your <i>partner</i> for <s>change</s></p>
+  <p class="tt">Your <i>partner</i> for <code>coding</code></p>
+  <p class="tt">Your <i>partner</i> for <a href="#target" target="_blank">life</a></p>
+  <p class="tt">Your <i>partner</i> for <span class="red">support</span> </p>
 </div>
 ```
 In this example I have also used `ttt` as a classname. I will use this to target the output of my ticker type text.
