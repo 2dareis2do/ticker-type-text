@@ -14,51 +14,69 @@
     */
     $.fn.tickerText = function (contents, keep, seconds, delay = 20, iterations = 0, ratio, secondsout, dev = false, pausetarget, stoptarget) {
         let current = 0, //state
-        count = 0, //state
-        deviance = 20,
-        inTransPercent = ratio,
-        outTransPercent = 1 - ratio,
-        exit = false,
-        elem = this,
-        pause = false,
-        da,
-        daDif,
-        dat,
-        ds,
-        dx,
-        dxx,
-        dyy,
-        dy,
-        timelineTimerAdd,
-        timelineTimerSubract,
-        timelineTimerNoop,
-        masterTimelineTimerAdd,
-        masterTimelineTimerAddTidy,
-        masterTimelineTimerSubtract,
-        masterTimelineTimerSubtractTidy;
+            count = 0, //state
+            deviance = 20,
+            inTransPercent = ratio,
+            outTransPercent = 1 - ratio,
+            exit = false,
+            elem = this,
+            pause = false,
+            da,
+            daDif,
+            dat,
+            ds,
+            dx,
+            dxx,
+            dyy,
+            dy,
+            timelineTimerAdd,
+            timelineTimerSubract,
+            timelineTimerNoop,
+            masterTimelineTimerAdd,
+            masterTimelineTimerAddTidy,
+            masterTimelineTimerSubtract,
+            masterTimelineTimerSubtractTidy;
 
-        // console.log("contents", contents);
-        contents.each(function (any) {
-            let temp = contents[any];
-            // console.log(temp, typeof temp);
-            // console.log("tremp", temp);
-            // console.log(temp.innerHTML,  typeof temp.innerHTML);
-            // console.log(temp.innerHTML.length);
-            let re = /<(\S*?)[^>]*>.*?<\/\1>|<.*?\/>/;
-            let re2 = /(\>).+?(?=\<)/g;
-            let myArray = temp.innerHTML.match(re);
-            console.log("myArray",myArray);
-            let str = myArray[0].match(re2);
-            // console.log(str);
+        let currentChild = 0;
+        let childLength = 0;
+        let childCharCounted = 0;
+        let childCounted = 0;
 
-            str = str[0].slice(1);  // .substring(1);
-            console.log("str",str);
-            let myArraySplit = temp.innerHTML.split((re));
-            console.log("myArraySplit", myArraySplit);
+        let cc = contents.clone();
 
-            // console.log(temp.innerHTML, typeof temp.innerHTML);
+        /*
+        / Function for serialising HTML Object
+        */
+        function serialise(obj) {
+            cc2 = [];
 
-        })
+            obj.each(function (index, any) {
+
+                let $children = $(any).children();
+
+                //set up
+                cc2[index] = [];
+
+
+                $children.each(function (indexi, item) {
+                    //add child
+                    cc2[index][indexi + 1] = item;
+
+                    //substitute token
+                    $(item).replaceWith("/" + (1 + indexi));
+                })
+
+                cc2[index][0] = any.innerHTML;
+
+            })
+
+            return { "content": cc2 };
+
+        }
+
+        let scontent = serialise(cc);
+
+        console.log("serialised object: \n", scontent);
 
         if (pausetarget) {
             $("#" + pausetarget).on("click", function (e) {
@@ -78,7 +96,9 @@
 
         let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
         let textArray = contents[count % contents.length].textContent.split("");
+        // console.log("textArray", textArray);
 
+        let textArrayNew = scontent.content[count % scontent.content.length];
         // needs to be able to start everythng again immediately
         function reset() {
             clearTimeout(masterTimelineTimerAdd);
@@ -94,32 +114,73 @@
         function timeoutAdd() {
             timelineTimerAdd = setTimeout(function () {
 
-                let text = elem.text();
-                if (!keep && current < textArray.length ) {
-                    elem.text(text + textArray[current]);
-                    current++;
+                if (!keep && current < textArray.length) {
+                    // elem.append(textArray[current]);
+                    // current++;
                 }
+                if (current < textArray.length && count >= 0) {
+                    // handle n in /1 /2
+                    // in a way the number has no significance as we can determine
 
-                if (keep && current < textArray.length && count >= 0) {
-                    if (textArray[current] !== undefined) {
-                        elem.text(text + textArray[current]);
+                    // currentChild denotes if we are handling the parent or a child
+                    if ((textArrayNew[0][current - childCharCounted + (2 * childCounted)] !== "/") && currentChild === 0) {
+                        elem.append(textArray[current]);
+
+                        console.log("parent textArray[current] , current html appended", textArray[current], elem.html());
                     }
+
+                    if (textArrayNew[0][current - childCharCounted + (2 * childCounted)] === "/") {
+                        // /1
+                        let childCount = childCounted + 1;
+
+                        if (textArrayNew[0][current + 1 - childCharCounted + (2 * childCounted)] == childCount) {
+                            if (currentChild === 0) {
+                                currentChild = childCount;
+                                childLength = $(textArrayNew[childCount]).text().length;
+                                // on second iteration this is an empty string!
+                                console.log("childLength initial add", childLength, childCount, JSON.stringify(textArrayNew[childCount]), $(textArrayNew[childCount]).text());
+
+                                $(textArrayNew[childCount]).text("");
+                                elem.append(textArrayNew[childCount]);
+                                console.log("child cc0, current html tag appended 0", $(textArrayNew[childCount]).text(), elem.html());
+                            }
+                            // console.log(typeof(childCounted));
+                            elem.children()[childCounted].append(textArray[current]);
+                            console.log("child current html tag , appended !0", textArray[current], elem.html());
+                            childLength = childLength - 1;
+                            console.log("childLength after", childLength)
+                            childCharCounted = childCharCounted + 1;
+
+                            // set target child to parent if childCounted = 0
+                            if (childLength === 0) {
+                                childCounted = childCount;
+                                console.log("childCounted add - exit", childCounted, $(textArrayNew[childCount]).text());
+
+                                currentChild = 0;
+
+                            }
+
+                        }
+
+
+                    }
+
                     current++;
                 }
                 if (current >= textArray.length) {
                     da = performance.now();
                     daDif = da - dx;
-                    if (daDif >= (1000 * inTransPercent * seconds) - deviance ) {
+                    if (daDif >= (1000 * inTransPercent * seconds) - deviance) {
                         daDif = 0;
                     }
                     if (dev) {
                         da = performance.now();
                         console.log("completed pt1 ", da - dx, "microseconds", "text", elem.text());
                     }
+
                     clearInterval(timelineTimerAdd);
                     part2();
                     return;
-
                 }
 
                 if (!exit) {
@@ -134,19 +195,66 @@
 
         // subtract function
         function timeoutSubtract() {
+
             timelineTimerSubract = setTimeout(function () {
 
-                //do stuff
-                let tempText;
-                if (elem.text().length > keep) {
-                    tempText = elem.text().substring(0, elem.text().length - 1);
-                }
-                else {
-                    tempText = elem.text();
-                }
+                if (current >= 0) {
 
-                if (current > 0 ) {
-                    elem.text(tempText);
+                    //child
+                    if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2] === "/") {
+
+                        // let childCount = elem.children().length -1;
+                        // this is temporary variable useful for targeting array thats starts with 0, 1, 2 etc
+                        let childCount = childCounted - 1;
+
+                        // console.log("childcount, no. children", childCount, elem.children().length);
+
+                        //child
+                        if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] == childCounted) {
+
+                            if (currentChild === 0) {
+                                currentChild = childCounted;
+                                childLength = $(textArrayNew[childCounted]).text().length;
+                            }
+
+                            let string = $(elem.children()[childCount]).text();
+                            let shorterString = string.substring(0, string.length - 1);
+                            $(elem.children()[childCount]).text(shorterString);
+                            // console.log("child  $(elem.children()[childCount]), current html  removed", 
+                            // //render
+                            // elem.html());
+
+                            childCharCounted = childCharCounted - 1;
+
+                            childLength = childLength - 1;
+
+                            // if we have removed all text move target back to parent and remove child element
+                            // do this as if it was one step i.e. text and child element
+                            if (childLength === 0) {
+                                // console.log("to be removed ", elem.children()[childCount])
+                                elem.children()[childCount].remove();
+                                //now that we have removed the target decrease the number of counted children
+                                childCounted = childCount;
+                                //return to parent
+                                currentChild = 0;
+                                // console.log("child 0 current html removed", elem.html());
+
+                            }
+
+                        }
+                    }
+
+                    // parent
+                    if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2] !== "/" && currentChild === 0) {
+
+                        let shortenedString = elem.html().substring(0, elem.html().length - 1)
+                        if (elem.text().length > keep) {
+                            elem.html(shortenedString);
+                            // console.log("parent 0 current html  removed", elem.html());
+
+                        }
+                    }
+
                     current--;
                 }
 
@@ -203,7 +311,7 @@
                     return;
                 };
 
-            }, maxInDelay );
+            }, maxInDelay);
         }
 
         function part1() {
@@ -213,13 +321,16 @@
                 elem.text("");
             }
 
-
             masterTimelineTimerAdd = setTimeout(function () {
                 if (!exit) {
+                    // console.log(count);
+
                     timeoutAdd();
                 } else {
                     clearTimeout(masterTimelineTimerAdd);
-                   // part2();
+                    // part2();
+
+                    // elem.text(text + "rest string");
                     return;
                 };
 
@@ -228,13 +339,6 @@
 
         function part2() {
             masterTimelineTimerAddTidy = setTimeout(function () {
-
-                let text = elem.text();
-
-                if (text != contents[(count) % contents.length].textContent && count >= 1 && !exit && (vis() && !pause)) {
-                    elem.text(contents[count % contents.length].textContent);
-                    current = contents[count % contents.length].textContent.length;
-                }
 
                 dat = performance.now();
                 if (dev) {
@@ -277,10 +381,6 @@
                 if (!keep && text && !exit && (vis() && !pause)) {
                     elem.text("");
                 }
-                // clean if we are using keep
-                if (keep && text != contents[count % contents.length].textContent.substr(0, keep) && !exit && (vis() && !pause)) {
-                    elem.text(contents[count % contents.length].textContent.substr(0, keep));
-                }
 
                 // set speed of next iteration if using 2nd speed parameter
                 if (secondsout && count === 0) {
@@ -295,9 +395,14 @@
                 if (!exit && (!pause || vis())) {
                     // lets make sure we increase the count to make sure we select the right text
                     count++;
-
                     // update text array after count increment
+                    // unfortunately this is currently necessary after every 
+                    // iteration as we are mutating the data!
+                    cc = contents.clone();
+                    scontent = serialise(cc);
+
                     textArray = contents[count % contents.length].textContent.split("");
+                    textArrayNew = scontent.content[[count % scontent.content.length]];
 
                     // denotes new iteration
                     if (dev) {
