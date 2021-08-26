@@ -44,6 +44,8 @@
 
         let cc = contents.clone();
 
+        let target = document.getElementById('target');
+
         /*
         / Function for serialising HTML Object
         */
@@ -98,7 +100,9 @@
         let textArray = contents[count % contents.length].textContent.split("");
         // console.log("textArray", textArray);
 
-        let textArrayNew = scontent.content[count % scontent.content.length];
+        // serialised text array
+        let textArraySerialised = scontent.content[count % scontent.content.length];
+        // console.log("textArraySerialised", textArraySerialised);
         // needs to be able to start everythng again immediately
         function reset() {
             clearTimeout(masterTimelineTimerAdd);
@@ -119,33 +123,50 @@
                     // current++;
                 }
                 if (current < textArray.length && count >= 0) {
+                    
                     // handle n in /1 /2
                     // in a way the number has no significance as we can determine
 
                     // currentChild denotes if we are handling the parent or a child
-                    if ((textArrayNew[0][current - childCharCounted + (2 * childCounted)] !== "/") && currentChild === 0) {
-                        elem.append(textArray[current]);
+                    
+                    //parent
+                    if ((textArraySerialised[0][current - childCharCounted + (2 * childCounted)] !== "/") && currentChild === 0) {
+                       elem.append(textArray[current]);
+                       //remove quotes
+                       elem.html(elem.html());
+                        // target.innerText += textArray[current];
+                    //    console.log("elem parent, target, $(target), target.innerText", elem, target, $(target), target.innerText);
+                        // let textnode = document.createTextNode(textArray[current]);
+                        // elem.appendChild(textnode);
+                        // elem.text(elem.text() + textArray[current]);
 
                         // console.log("parent textArray[current] , current html appended", textArray[current], elem.html());
                     }
-
-                    if (textArrayNew[0][current - childCharCounted + (2 * childCounted)] === "/") {
+                    //child
+                    if (textArraySerialised[0][current - childCharCounted + (2 * childCounted)] === "/") {
                         // /1
                         let childCount = childCounted + 1;
 
-                        if (textArrayNew[0][current + 1 - childCharCounted + (2 * childCounted)] == childCount) {
+                        if (textArraySerialised[0][current + 1 - childCharCounted + (2 * childCounted)] == childCount) {
                             if (currentChild === 0) {
                                 currentChild = childCount;
-                                childLength = $(textArrayNew[childCount]).text().length;
+                                childLength = $(textArraySerialised[childCount]).text().length;
                                 // on second iteration this is an empty string!
-                                // console.log("childLength initial add", childLength, childCount, JSON.stringify(textArrayNew[childCount]), $(textArrayNew[childCount]).text());
+                                // console.log("childLength initial add", childLength, childCount, JSON.stringify(textArraySerialised[childCount]), $(textArraySerialised[childCount]).text());
 
-                                $(textArrayNew[childCount]).text("");
-                                elem.append(textArrayNew[childCount]);
-                                // console.log("child cc0, current html tag appended 0", $(textArrayNew[childCount]).text(), elem.html());
+                                $(textArraySerialised[childCount]).text("");
+                                elem.append(textArraySerialised[childCount]);
+                                // console.log("elem child, target, $(target), target.innerText", elem, target, $(target), target.innerText);
+
+                                // console.log("child cc0, current html tag appended 0", $(textArraySerialised[childCount]).text(), elem.html());
                             }
                             // console.log(typeof(childCounted));
                             elem.children()[childCounted].append(textArray[current]);
+                            $(elem.children()[childCounted]).html($(elem.children()[childCounted]).html());
+                            // console.log($(elem.children()[childCounted]).html());
+                            // elem.children()[childCounted].html(elem.children()[childCounted].html());
+                            // elem.children()[childCounted].text(elem.children()[childCounted].text() + textArray[current]);
+
                             // console.log("child current html tag , appended !0", textArray[current], elem.html());
                             childLength = childLength - 1;
                             // console.log("childLength after", childLength)
@@ -154,7 +175,7 @@
                             // set target child to parent if childCounted = 0
                             if (childLength === 0) {
                                 childCounted = childCount;
-                                // console.log("childCounted add - exit", childCounted, $(textArrayNew[childCount]).text());
+                                // console.log("childCounted add - exit", childCounted, $(textArraySerialised[childCount]).text());
 
                                 currentChild = 0;
 
@@ -201,7 +222,7 @@
                 if (current >= 0) {
 
                     //child
-                    if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2] === "/") {
+                    if (textArraySerialised[0][current - childCharCounted + (2 * childCounted) - 2] === "/") {
 
                         // let childCount = elem.children().length -1;
                         // this is temporary variable useful for targeting array thats starts with 0, 1, 2 etc
@@ -210,11 +231,11 @@
                         // console.log("childcount, no. children", childCount, elem.children().length);
 
                         //child
-                        if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 1] == childCounted) {
+                        if (textArraySerialised[0][current - childCharCounted + (2 * childCounted) - 1] == childCounted) {
 
                             if (currentChild === 0) {
                                 currentChild = childCounted;
-                                childLength = $(textArrayNew[childCounted]).text().length;
+                                childLength = $(textArraySerialised[childCounted]).text().length;
                             }
 
                             let string = $(elem.children()[childCount]).text();
@@ -245,7 +266,7 @@
                     }
 
                     // parent
-                    if (textArrayNew[0][current - childCharCounted + (2 * childCounted) - 2] !== "/" && currentChild === 0) {
+                    if (textArraySerialised[0][current - childCharCounted + (2 * childCounted) - 2] !== "/" && currentChild === 0) {
 
                         let shortenedString = elem.html().substring(0, elem.html().length - 1)
                         if (elem.text().length > keep) {
@@ -402,7 +423,7 @@
                     scontent = serialise(cc);
 
                     textArray = contents[count % contents.length].textContent.split("");
-                    textArrayNew = scontent.content[[count % scontent.content.length]];
+                    textArraySerialised = scontent.content[[count % scontent.content.length]];
 
                     // denotes new iteration
                     if (dev) {
