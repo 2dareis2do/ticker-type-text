@@ -98,11 +98,9 @@
 
         let maxInDelay = Math.floor(((seconds * inTransPercent) * 1000) / (contents[count % contents.length].textContent.length));
         let textArray = contents[count % contents.length].textContent.split("");
-        // console.log("textArray", textArray);
 
-        // serialised text array
+        // serialised text array(s)
         let textArraySerialised = scontent.content[count % scontent.content.length];
-        // console.log("textArraySerialised", textArraySerialised);
         // needs to be able to start everythng again immediately
         function reset() {
             clearTimeout(masterTimelineTimerAdd);
@@ -118,10 +116,10 @@
         function timeoutAdd() {
             timelineTimerAdd = setTimeout(function () {
 
-                if (!keep && current < textArray.length) {
-                    // elem.append(textArray[current]);
-                    // current++;
-                }
+                // if (!keep && current < textArray.length) {
+                //     // elem.append(textArray[current]);
+                //     // current++;
+                // }
                 if (current < textArray.length && count >= 0) {
                     
                     // handle n in /1 /2
@@ -131,16 +129,11 @@
                     
                     //parent
                     if ((textArraySerialised[0][current - childCharCounted + (2 * childCounted)] !== "/") && currentChild === 0) {
-                       elem.append(textArray[current]);
-                       //remove quotes
-                       elem.html(elem.html());
-                        // target.innerText += textArray[current];
-                    //    console.log("elem parent, target, $(target), target.innerText", elem, target, $(target), target.innerText);
-                        // let textnode = document.createTextNode(textArray[current]);
-                        // elem.appendChild(textnode);
-                        // elem.text(elem.text() + textArray[current]);
-
-                        // console.log("parent textArray[current] , current html appended", textArray[current], elem.html());
+                        elem.append(textArray[current]);
+                        //remove quotes
+                        elem.html(function (index, oldHTML) { return oldHTML});
+                        //replaces
+                        //    elem.html(elem.html());
                     }
                     //child
                     if (textArraySerialised[0][current - childCharCounted + (2 * childCounted)] === "/") {
@@ -152,31 +145,19 @@
                                 currentChild = childCount;
                                 childLength = $(textArraySerialised[childCount]).text().length;
                                 // on second iteration this is an empty string!
-                                // console.log("childLength initial add", childLength, childCount, JSON.stringify(textArraySerialised[childCount]), $(textArraySerialised[childCount]).text());
-
                                 $(textArraySerialised[childCount]).text("");
                                 elem.append(textArraySerialised[childCount]);
-                                // console.log("elem child, target, $(target), target.innerText", elem, target, $(target), target.innerText);
-
-                                // console.log("child cc0, current html tag appended 0", $(textArraySerialised[childCount]).text(), elem.html());
                             }
-                            // console.log(typeof(childCounted));
                             elem.children()[childCounted].append(textArray[current]);
-                            $(elem.children()[childCounted]).html($(elem.children()[childCounted]).html());
-                            // console.log($(elem.children()[childCounted]).html());
-                            // elem.children()[childCounted].html(elem.children()[childCounted].html());
-                            // elem.children()[childCounted].text(elem.children()[childCounted].text() + textArray[current]);
+                            // remove quotation marks when using append on
+                            $(elem.children()[childCounted]).html(function (index, oldHTML) { return oldHTML });
 
-                            // console.log("child current html tag , appended !0", textArray[current], elem.html());
                             childLength = childLength - 1;
-                            // console.log("childLength after", childLength)
                             childCharCounted = childCharCounted + 1;
 
                             // set target child to parent if childCounted = 0
                             if (childLength === 0) {
                                 childCounted = childCount;
-                                // console.log("childCounted add - exit", childCounted, $(textArraySerialised[childCount]).text());
-
                                 currentChild = 0;
 
                             }
@@ -241,9 +222,6 @@
                             let string = $(elem.children()[childCount]).text();
                             let shorterString = string.substring(0, string.length - 1);
                             $(elem.children()[childCount]).text(shorterString);
-                            // console.log("child  $(elem.children()[childCount]), current html  removed", 
-                            // //render
-                            // elem.html());
 
                             childCharCounted = childCharCounted - 1;
 
@@ -252,14 +230,11 @@
                             // if we have removed all text move target back to parent and remove child element
                             // do this as if it was one step i.e. text and child element
                             if (childLength === 0) {
-                                // console.log("to be removed ", elem.children()[childCount])
                                 elem.children()[childCount].remove();
                                 //now that we have removed the target decrease the number of counted children
                                 childCounted = childCount;
                                 //return to parent
                                 currentChild = 0;
-                                // console.log("child 0 current html removed", elem.html());
-
                             }
 
                         }
@@ -271,8 +246,6 @@
                         let shortenedString = elem.html().substring(0, elem.html().length - 1)
                         if (elem.text().length > keep) {
                             elem.html(shortenedString);
-                            // console.log("parent 0 current html  removed", elem.html());
-
                         }
                     }
 
@@ -344,14 +317,10 @@
 
             masterTimelineTimerAdd = setTimeout(function () {
                 if (!exit) {
-                    // console.log(count);
-
                     timeoutAdd();
                 } else {
                     clearTimeout(masterTimelineTimerAdd);
                     // part2();
-
-                    // elem.text(text + "rest string");
                     return;
                 };
 
