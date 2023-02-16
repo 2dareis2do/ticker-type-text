@@ -53,7 +53,10 @@ The ticker can be instantiated like so:
 
 ```
 let animatetext = function(){
+  // Assign our HTML collection that we want to iterate to $elements
   let $elements = $(".tt-holder .tt");
+  // Set the Ticker Type Text plugin to target the element with the '.ttt' class
+  // and also pass the $elements collection as the first parameter.  
   $(".ttt").tickerText($elements, 17, 2, 30, 1, 0.7, 3);
 }
 $(animatetext) ;
@@ -99,3 +102,10 @@ string that is passed element to target for trigger e.g. html5 button
 ### stoptarget
 
 string that is passed element to target for trigger e.g. html5 button
+
+## NPM
+This package can is now available on npm
+
+```
+npm i ticker-type-text
+```
