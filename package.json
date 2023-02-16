@@ -11,7 +11,7 @@
     "url": "git+https://github.com/2dareis2do/ticker-type-text.git"
   },
   "keywords": [
-    "jQuery"
+    "jQuery, jquery-plugin, ecosystem:jquery"
   ],
   "author": "Daniel Lobo",
   "license": "ISC",
