@@ -14,7 +14,7 @@
     "jQuery, jquery-plugin, ecosystem:jquery"
   ],
   "author": "Daniel Lobo",
-  "license": "ISC",
+  "license": "GPL 2",
   "bugs": {
     "url": "https://github.com/2dareis2do/ticker-type-text/issues"
   },
