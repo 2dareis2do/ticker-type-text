@@ -45,3 +45,8 @@
 /* h1 {
   font-weight: 400;
 } */
+
+/* supports view ticker type text implementation */
+.ttt_container .ttt_items {
+  display: none;
+}

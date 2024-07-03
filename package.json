@@ -1,6 +1,6 @@
 {
   "name": "ticker-type-text",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Ticker Type Text jQuery Plugin",
   "main": "./dist/index.js",
   "scripts": {
